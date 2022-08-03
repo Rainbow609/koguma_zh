@@ -8,35 +8,61 @@
 
 package me.ghostbear.koguma.ui.main
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FileOpen
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Save
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -74,9 +100,16 @@ fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainState
         it?.let(onSave)
     }
 
+    val scrollState = rememberScrollState()
+    val topAppBarState = enterAlwaysScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
+        modifier = Modifier
+            .nestedScroll(topAppBarState.nestedScrollConnection)
+            .navigationBarsPadding(),
         topBar = {
             SmallTopAppBar(
+                modifier = Modifier.statusBarsPadding(),
                 title = {
                     Text(text = stringResource(id = R.string.app_name))
                 },
@@ -84,25 +117,61 @@ fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainState
                     IconButton(onClick = { openDocumentLauncher.launch(arrayOf("application/json")) }) {
                         Icon(Icons.Outlined.FileOpen, contentDescription = "open_file")
                     }
-                    IconButton(
-                        onClick = {
-                            if (viewModel.currentUri != null) {
-                                onSave(viewModel.currentUri!!)
-                            } else {
-                                createDocumentLauncher.launch("details.json")
-                            }
-                        },
-                        enabled = viewModel.isSavable
-                    ) {
-                        Icon(Icons.Outlined.Save, contentDescription = "save_file")
-                    }
-                }
+                },
+                scrollBehavior = topAppBarState
             )
+        },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = viewModel.isSavable,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                ExtendedFloatingActionButton(
+                    text = { Text(text = "Save") },
+                    icon = { Icon(Icons.Outlined.Save, contentDescription = "save_file") },
+                    onClick = {
+                        if (viewModel.currentUri != null) {
+                            onSave(viewModel.currentUri!!)
+                        } else {
+                            createDocumentLauncher.launch("details.json")
+                        }
+                    },
+                    expanded = scrollState.isScrollingUp()
+                )
+            }
+        },
+        bottomBar = {
+            NavigationBar(
+                modifier = Modifier
+                    .navigationBarsPadding()
+            ) {
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { context.toast("TODO") },
+                    icon = {
+                        Icon(Icons.Outlined.Home, contentDescription = "home")
+                    },
+                    label = {
+                        Text(text = "Home")
+                    }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { context.toast("TODO") },
+                    icon = {
+                        Icon(Icons.Outlined.Search, contentDescription = "home")
+                    },
+                    label = {
+                        Text(text = "Search")
+                    }
+                )
+            }
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(paddingValues)
                 .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
@@ -156,10 +225,11 @@ fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainState
                     )
                 }
             )
+            val highlightColor = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
             Text(
                 text = buildAnnotatedString {
                     append("Use a comma (")
-                    withStyle(style = SpanStyle(background = Color.LightGray, letterSpacing = 8.sp)) {
+                    withStyle(style = SpanStyle(background = highlightColor, letterSpacing = 8.sp)) {
                         append(",")
                     }
                     append(") to separate the genres")
@@ -191,4 +261,16 @@ fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainState
             }
         }
     }
+}
+
+@Composable
+fun ScrollState.isScrollingUp(): Boolean {
+    var previousOffset by remember { mutableStateOf(value) }
+    return remember {
+        derivedStateOf {
+            (previousOffset >= value).also {
+                previousOffset = value
+            }
+        }
+    }.value
 }
