@@ -14,6 +14,7 @@ Koguma a tool that helps you create metadata for Tachiyomi's Local Source entrie
 - Hilt for dependency injection
 - Kotlin Serialization for parsing and writing JSON.
 - Jetpack Compose for creating the UI
+- Version Catalog for dependency management
 
 ## License
 

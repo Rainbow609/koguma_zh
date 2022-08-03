@@ -20,7 +20,7 @@ jobs:
       
       - name: Build application
         uses: gradle/gradle-build-action@v2
-      - run: gradle assemble
+      - run: gradle assembleDebug
       
       - name: Upload artifact
         uses: actions/upload-artifact@v3
