@@ -9,85 +9,80 @@
 package me.ghostbear.koguma.ui.main
 
 import android.net.Uri
-import android.util.Log
-import androidx.compose.runtime.derivedStateOf
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.ViewModelProvider
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import kotlinx.serialization.json.encodeToStream
-import me.ghostbear.koguma.model.Manga
-import me.ghostbear.koguma.model.Status
-import java.io.InputStream
-import java.io.OutputStream
-import javax.inject.Inject
+import me.ghostbear.koguma.R
+import me.ghostbear.koguma.domain.interactor.ReadMangaFromFile
+import me.ghostbear.koguma.domain.interactor.WriteMangaToFile
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
-    private val json: Json
-) : ViewModel() {
+class MainViewModel @AssistedInject constructor(
+    @Assisted private val state: MainStateImpl,
+    private val readMangaFromFile: ReadMangaFromFile,
+    private val writeMangaToFile: WriteMangaToFile
+) : ViewModel(), MainState by state {
 
     private val _events = Channel<Event>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()
 
-    var openUri: Uri? by mutableStateOf(null)
+    var currentUri: Uri? by mutableStateOf(null)
 
-    var title: String? by mutableStateOf(null)
-    var author: String? by mutableStateOf(null)
-    var artist: String? by mutableStateOf(null)
-    var description: String? by mutableStateOf(null)
-    var genre: String? by mutableStateOf(null)
-    var status: Status? by mutableStateOf(null)
-
-    val isSavable by derivedStateOf { listOf(title, author, artist, description, genre, status).any { it != null } }
-
-    suspend fun load(inputStream: InputStream) = withContext(Dispatchers.IO) {
-        try {
-            val manga = json.decodeFromStream<Manga>(inputStream)
-            title = manga.title
-            author = manga.author
-            artist = manga.artist
-            description = manga.description
-            genre = manga.genre?.joinToString()
-            status = manga.status
-            _events.trySend(Event.SuccessReadingFile)
-        } catch (e: Exception) {
-            Log.e("MainViewModel", "Error reading manga detail from file", e)
-            _events.trySend(Event.FailureReadingFile(e))
+    suspend fun load(uri: Uri) {
+        when (val result = readMangaFromFile.await(uri)) {
+            is ReadMangaFromFile.Result.InternalError -> _events.trySend(Event.InternalError(result.error))
+            ReadMangaFromFile.Result.CouldntDecodeFile -> _events.trySend(Event.LocalizedMessage(R.string.error_decode_file))
+            ReadMangaFromFile.Result.CouldntReadFile -> _events.trySend(Event.LocalizedMessage(R.string.error_reading_file))
+            ReadMangaFromFile.Result.FileMalformed -> _events.trySend(Event.LocalizedMessage(R.string.error_file_malformed))
+            ReadMangaFromFile.Result.FileNotFound -> _events.trySend(Event.LocalizedMessage(R.string.error_file_not_found))
+            is ReadMangaFromFile.Result.Success -> {
+                val manga = result.manga
+                title = manga.title
+                author = manga.author
+                artist = manga.artist
+                description = manga.description
+                genre = manga.genre?.joinToString()
+                status = manga.status
+                _events.trySend(Event.LocalizedMessage(R.string.success_reading_file))
+            }
         }
     }
 
-    suspend fun save(outputStream: OutputStream) = withContext(Dispatchers.IO) {
-        try {
-            json.encodeToStream(
-                Manga(
-                    title,
-                    author,
-                    artist,
-                    description,
-                    genre?.split(",\\s*".toRegex()),
-                    status
-                ),
-                outputStream
-            )
-            _events.trySend(Event.SuccessWritingFile)
-        } catch (e: Exception) {
-            Log.e("MainViewModel", "Error writing manga detail from file", e)
-            _events.trySend(Event.FailureWritingFile(e))
+    suspend fun save(uri: Uri) {
+        when (val result = writeMangaToFile.await(uri, createManga())) {
+            is WriteMangaToFile.Result.InternalError -> _events.trySend(Event.InternalError(result.error))
+            WriteMangaToFile.Result.CouldntEncodeFile -> _events.trySend(Event.LocalizedMessage(R.string.error_encode_file))
+            WriteMangaToFile.Result.CouldntWriteFile -> _events.trySend(Event.LocalizedMessage(R.string.error_writing_file))
+            WriteMangaToFile.Result.FileNotFound -> _events.trySend(Event.LocalizedMessage(R.string.error_file_not_found))
+            WriteMangaToFile.Result.Success -> _events.trySend(Event.LocalizedMessage(R.string.success_writing_file))
         }
     }
 
     sealed class Event {
-        object SuccessReadingFile : Event()
-        data class FailureReadingFile(val error: Throwable) : Event()
-        object SuccessWritingFile : Event()
-        data class FailureWritingFile(val error: Throwable) : Event()
+        data class LocalizedMessage(@StringRes val id: Int) : Event()
+        data class InternalError(val error: Throwable) : Event()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(state: MainStateImpl): MainViewModel
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            state: MainStateImpl
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(state) as T
+            }
+        }
     }
 }

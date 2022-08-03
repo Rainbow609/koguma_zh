@@ -6,33 +6,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package me.ghostbear.koguma.model
-
+package me.ghostbear.koguma.domain.model
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-
-@Serializable
-data class Manga(
-    @SerialName("title")
-    val title: String? = null,
-    @SerialName("author")
-    val author: String? = null,
-    @SerialName("artist")
-    val artist: String? = null,
-    @SerialName("description")
-    val description: String? = null,
-    @SerialName("genre")
-    val genre: List<String>? = null,
-    @SerialName("status")
-    val status: Status? = null
-)
 
 @Serializable(with = StatusAsStringSerializer::class)
 enum class Status {
@@ -56,7 +38,8 @@ enum class Status {
 
 object StatusAsStringSerializer : KSerializer<Status> {
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("status", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("status", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: Status) {
         val string = "${value.ordinal}"
@@ -68,5 +51,3 @@ object StatusAsStringSerializer : KSerializer<Status> {
         return Status.valueOf(string.toIntOrNull() ?: 0)
     }
 }
-
-

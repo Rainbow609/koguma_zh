@@ -47,27 +47,28 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.ghostbear.koguma.R
-import me.ghostbear.koguma.model.Status
+import me.ghostbear.koguma.domain.model.Status
 import me.ghostbear.koguma.ui.main.MainViewModel.Event
 import me.ghostbear.koguma.util.toast
 
 @Composable
-fun MainScreen(viewModel: MainViewModel = viewModel()) {
+fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainStateImpl)) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val onSave = f@{ uri: Uri ->
         scope.launch {
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                 viewModel.save(outputStream)
-            }
+            viewModel.save(uri)
         }
     }
     val openDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
-        viewModel.openUri = it
+        scope.launch {
+            it?.let { it ->
+                viewModel.currentUri = it
+                viewModel.load(it)
+            }
+        }
     }
     val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
         it?.let(onSave)
@@ -85,8 +86,8 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     }
                     IconButton(
                         onClick = {
-                            if (viewModel.openUri != null) {
-                                onSave(viewModel.openUri!!)
+                            if (viewModel.currentUri != null) {
+                                onSave(viewModel.currentUri!!)
                             } else {
                                 createDocumentLauncher.launch("details.json")
                             }
@@ -183,20 +184,11 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.events.collectLatest { event ->
+        viewModel.events.collect { event ->
             when (event) {
-                is Event.FailureReadingFile -> context.toast("Failure reading from file: ${event.error.message}")
-                is Event.FailureWritingFile -> context.toast("Failure writing from file: ${event.error.message}")
-                Event.SuccessReadingFile -> context.toast("Success reading file")
-                Event.SuccessWritingFile -> context.toast("Success writing file")
+                is Event.InternalError -> context.toast(event.error.message ?: context.getString(R.string.internal_error))
+                is Event.LocalizedMessage -> context.toast(event.id)
             }
-        }
-    }
-
-    LaunchedEffect(viewModel.openUri) {
-        val uri = viewModel.openUri ?: return@LaunchedEffect
-        context.contentResolver.openInputStream(uri)!!.use { inputStream ->
-            viewModel.load(inputStream)
         }
     }
 }

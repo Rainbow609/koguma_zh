@@ -15,12 +15,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.ActivityComponent
 import me.ghostbear.koguma.ui.main.MainScreen
+import me.ghostbear.koguma.ui.main.MainViewModel
 import me.ghostbear.koguma.ui.theme.KogumaTheme
 
 @AndroidEntryPoint
 class KogumaActivity : ComponentActivity() {
+
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ViewModelFactoryProvider {
+        fun mainViewModelFactory(): MainViewModel.Factory
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Koguma</string>
+    <string name="error_encode_file">Couldn\'t encode file</string>
+    <string name="error_writing_file">Couldn\'t write file</string>
+    <string name="error_file_not_found">File not found</string>
+    <string name="success_writing_file">Success writing file</string>
+    <string name="success_reading_file">Success reading file</string>
+    <string name="error_file_malformed">Couldn\'t decode file, the JSON content is malformed</string>
+    <string name="error_reading_file">Couldn\'t read file</string>
+    <string name="error_decode_file">Couldn\'t decode file</string>
+    <string name="internal_error">Internal Error</string>
 </resources>
