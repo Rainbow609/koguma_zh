@@ -67,6 +67,8 @@ dependencies {
 
     implementation(libs.kotlinx.serialization)
 
+    implementation(libs.bundles.ktor)
+
     implementation(libs.androidx.viewmodel.compose)
 
     implementation(libs.compose.icons)

@@ -2,6 +2,8 @@
 
 Koguma a tool that helps you create metadata for Tachiyomi's Local Source entries.
 
+The application uses AniList for getting metadata from online, but metadata can be manually created and edited if desired.
+
 ## Features
 
 - [x] Create JSON file for metadata
@@ -13,6 +15,7 @@ Koguma a tool that helps you create metadata for Tachiyomi's Local Source entrie
 - Coroutines for asynchronous work
 - Hilt for dependency injection
 - Kotlin Serialization for parsing and writing JSON.
+- Ktor for networking
 - Jetpack Compose for creating the UI
 - Jetpack Compose Navigation for navigating between screens
 - Version Catalog for dependency management

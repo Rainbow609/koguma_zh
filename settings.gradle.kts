@@ -18,6 +18,7 @@ dependencyResolutionManagement {
             compose()
             hilt()
             kotlinx()
+            ktor()
         }
     }
 }
@@ -55,9 +56,23 @@ fun VersionCatalogBuilder.hilt() {
 
     library("hilt-android", "com.google.dagger", "hilt-android").versionRef(hilt)
     library("hilt-compiler", "com.google.dagger", "hilt-compiler").versionRef(hilt)
-    library( "hilt-navigation", "androidx.hilt", "hilt-navigation-compose").version("1.0.0")
+    library("hilt-navigation", "androidx.hilt", "hilt-navigation-compose").version("1.0.0")
 }
 
 fun VersionCatalogBuilder.kotlinx() {
     library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.4.0-RC")
+}
+
+fun VersionCatalogBuilder.ktor() {
+    val ktor = version("ktor", "2.0.3")
+
+    library("ktor-core", "io.ktor", "ktor-client-core").versionRef(ktor)
+    library("ktor-cio", "io.ktor", "ktor-client-cio").versionRef(ktor)
+
+    library("ktor-content-negotiation", "io.ktor", "ktor-client-content-negotiation").versionRef(ktor)
+    library("ktor-serialization", "io.ktor", "ktor-serialization-kotlinx-json").versionRef(ktor)
+
+    library("ktor-logging","io.ktor","ktor-client-logging").versionRef(ktor)
+
+    bundle("ktor", listOf("ktor-core", "ktor-cio", "ktor-content-negotiation", "ktor-serialization", "ktor-logging"))
 }

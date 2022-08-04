@@ -15,13 +15,15 @@ import androidx.annotation.StringRes
 fun Context.toast(
     @StringRes id: Int,
     length: Int = Toast.LENGTH_SHORT
-) {
-    toast(getString(id), length)
+): Toast {
+    return toast(getString(id), length)
 }
 
 fun Context.toast(
     text: String,
     length: Int = Toast.LENGTH_SHORT
-) {
-    Toast.makeText(this, text, length).show()
+): Toast {
+    return Toast.makeText(this, text, length).also {
+        it.show()
+    }
 }

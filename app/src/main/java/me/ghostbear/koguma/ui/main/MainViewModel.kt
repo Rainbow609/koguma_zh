@@ -56,7 +56,7 @@ class MainViewModel @AssistedInject constructor(
     }
 
     suspend fun save(uri: Uri) {
-        when (val result = writeMangaToFile.await(uri, createManga())) {
+        when (val result = writeMangaToFile.await(uri, getManga())) {
             is WriteMangaToFile.Result.InternalError -> _events.trySend(Event.InternalError(result.error))
             WriteMangaToFile.Result.CouldntEncodeFile -> _events.trySend(Event.LocalizedMessage(R.string.error_encode_file))
             WriteMangaToFile.Result.CouldntWriteFile -> _events.trySend(Event.LocalizedMessage(R.string.error_writing_file))

@@ -12,6 +12,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.model.Status
 
 interface MainState {
@@ -24,16 +25,16 @@ interface MainState {
     val isSavable: Boolean
 }
 
-fun MainState(): MainState {
-    return MainStateImpl()
+fun MainState(manga: Manga = Manga()): MainState {
+    return MainStateImpl(manga)
 }
 
-class MainStateImpl : MainState {
-    override var title: String? by mutableStateOf(null)
-    override var author: String? by mutableStateOf(null)
-    override var artist: String? by mutableStateOf(null)
-    override var description: String? by mutableStateOf(null)
-    override var genre: String? by mutableStateOf(null)
-    override var status: Status? by mutableStateOf(null)
+class MainStateImpl(manga: Manga) : MainState {
+    override var title: String? by mutableStateOf(manga.title)
+    override var author: String? by mutableStateOf(manga.author)
+    override var artist: String? by mutableStateOf(manga.artist)
+    override var description: String? by mutableStateOf(manga.description)
+    override var genre: String? by mutableStateOf(manga.genre?.joinToString())
+    override var status: Status? by mutableStateOf(manga.status)
     override val isSavable: Boolean by derivedStateOf { listOf(title, author, artist, description, genre, status).any { it != null } }
 }

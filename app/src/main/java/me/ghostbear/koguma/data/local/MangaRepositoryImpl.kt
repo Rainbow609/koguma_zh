@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package me.ghostbear.koguma.data
+package me.ghostbear.koguma.data.local
 
 import android.content.Context
 import android.net.Uri

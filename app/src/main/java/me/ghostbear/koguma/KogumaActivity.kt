@@ -10,21 +10,35 @@ package me.ghostbear.koguma
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.components.ActivityComponent
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.ui.BottomNavigationBar
 import me.ghostbear.koguma.ui.Route
 import me.ghostbear.koguma.ui.main.MainScreen
@@ -33,7 +47,12 @@ import me.ghostbear.koguma.ui.main.MainStateImpl
 import me.ghostbear.koguma.ui.main.MainViewModel
 import me.ghostbear.koguma.ui.main.mainViewModel
 import me.ghostbear.koguma.ui.search.SearchScreen
+import me.ghostbear.koguma.ui.search.SearchState
+import me.ghostbear.koguma.ui.search.SearchStateImpl
+import me.ghostbear.koguma.ui.search.SearchViewModel
+import me.ghostbear.koguma.ui.search.searchViewModel
 import me.ghostbear.koguma.ui.theme.KogumaTheme
+import me.ghostbear.koguma.util.toast
 
 @AndroidEntryPoint
 class KogumaActivity : ComponentActivity() {
@@ -42,7 +61,11 @@ class KogumaActivity : ComponentActivity() {
     @InstallIn(ActivityComponent::class)
     interface ViewModelFactoryProvider {
         fun mainViewModelFactory(): MainViewModel.Factory
+
+        fun searchViewModelFactory(): SearchViewModel.Factory
     }
+
+    private var isConfirming = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +75,21 @@ class KogumaActivity : ComponentActivity() {
         setContent {
             KogumaTheme {
                 val navController = rememberNavController()
+
+                BackHandler(enabled = true) {
+                    if (isConfirming) {
+                        finish()
+                    } else {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            isConfirming = true
+                            val toast = toast("Press back to confirm exit")
+                            delay(1500)
+                            toast.cancel()
+                            isConfirming = false
+                        }
+                    }
+                }
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -63,14 +101,21 @@ class KogumaActivity : ComponentActivity() {
                             )
                         }
                     ) { paddingValues ->
-                        NavHost(navController = navController, startDestination = "home", modifier = Modifier.padding(paddingValues)) {
-                            composable(Route.Home.route) {
+                        NavHost(navController = navController, startDestination = Route.Home.route, modifier = Modifier.padding(paddingValues)) {
+                            composable(Route.Home.route) { currentBackStackEntry ->
                                 MainScreen(
-                                    viewModel = mainViewModel(MainState() as MainStateImpl)
+                                    viewModel = mainViewModel(MainState() as MainStateImpl, currentBackStackEntry)
                                 )
                             }
-                            composable(Route.Search.route) {
-                                SearchScreen()
+                            composable(Route.Search.route) { currentBackStackEntry ->
+                                val homeEntry = remember(currentBackStackEntry) {
+                                    navController.getBackStackEntry(Route.Home.route)
+                                }
+                                SearchScreen(
+                                    navController = navController,
+                                    mainViewModel = mainViewModel(MainState() as MainStateImpl, homeEntry),
+                                    viewModel = searchViewModel(SearchState() as SearchStateImpl, currentBackStackEntry)
+                                )
                             }
                         }
                     }

@@ -12,6 +12,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import me.ghostbear.koguma.data.remote.AniListRepositoryImpl
+import me.ghostbear.koguma.data.local.MangaRepositoryImpl
+import me.ghostbear.koguma.domain.repository.AniListRepository
 import me.ghostbear.koguma.domain.repository.MangaRepository
 
 @Module
@@ -20,5 +23,8 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindMangaRepository(mangaRepositoryImpl: MangaRepositoryImpl): MangaRepository
+
+    @Binds
+    abstract fun bindAniListRepository(aniListRepositoryImpl: AniListRepositoryImpl): AniListRepository
 
 }

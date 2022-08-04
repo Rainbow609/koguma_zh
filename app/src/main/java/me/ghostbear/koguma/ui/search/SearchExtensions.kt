@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package me.ghostbear.koguma.ui.main
+package me.ghostbear.koguma.ui.search
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
@@ -19,42 +19,28 @@ import me.ghostbear.koguma.KogumaActivity
 import me.ghostbear.koguma.domain.model.Manga
 
 @Composable
-fun mainViewModel(
-    state: MainStateImpl,
+fun searchViewModel(
+    state: SearchStateImpl,
     navBackStackEntry: NavBackStackEntry
-): MainViewModel {
+): SearchViewModel {
     val view = LocalView.current
     val factory = EntryPointAccessors.fromActivity(
         (view.context as Activity),
         KogumaActivity.ViewModelFactoryProvider::class.java
-    ).mainViewModelFactory()
-    return viewModel(
-        viewModelStoreOwner = navBackStackEntry,
-        factory = HiltViewModelFactory.createInternal(
-            (view.context as Activity),
-            navBackStackEntry,
-            navBackStackEntry.arguments,
-            MainViewModel.provideFactory(factory, state)
-        )
-    )
+    ).searchViewModelFactory()
+    return viewModel(factory = HiltViewModelFactory.createInternal(
+        (view.context as Activity),
+        navBackStackEntry,
+        navBackStackEntry.arguments,
+        SearchViewModel.provideFactory(factory, state)
+    ))
 }
 
-fun MainState.getManga(): Manga {
-    return Manga(
-        title,
-        author,
-        artist,
-        description,
-        genre?.split(",\\s*".toRegex())?.map { it.trim() },
-        status
-    )
-}
-
-fun MainState.setManga(manga: Manga) {
-    title = manga.title
-    author = manga.author
-    artist = manga.artist
-    description = manga.description
-    genre = manga.genre?.joinToString()
-    status = manga.status
-}
+val Manga.authorWithArtist: String
+    get() {
+        return when {
+            artist != null && artist != author -> "$author, $artist"
+            author != null -> author
+            else -> ""
+        }
+    }
