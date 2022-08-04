@@ -1,4 +1,4 @@
-# Koguma - a thrid-party tool for Tachiyomi
+# ![app icon](./.github/images/app-icon.png) Koguma
 
 Koguma a tool that helps you create metadata for Tachiyomi's Local Source entries.
 
@@ -14,6 +14,7 @@ Koguma a tool that helps you create metadata for Tachiyomi's Local Source entrie
 - Hilt for dependency injection
 - Kotlin Serialization for parsing and writing JSON.
 - Jetpack Compose for creating the UI
+- Jetpack Compose Navigation for navigating between screens
 - Version Catalog for dependency management
 
 ## License

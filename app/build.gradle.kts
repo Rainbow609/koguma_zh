@@ -30,7 +30,10 @@ android {
         named("release") {
             isShrinkResources = true
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -59,25 +62,28 @@ android {
 
 dependencies {
 
-    implementation (libs.hilt.android)
-    kapt (libs.hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    implementation (libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization)
 
-    implementation (libs.androidx.viewmodel.compose)
+    implementation(libs.androidx.viewmodel.compose)
 
-    implementation (libs.compose.icons)
+    implementation(libs.compose.icons)
 
-    implementation (libs.androidx.corektx)
-    implementation (libs.androidx.lifecycle.runtimektx)
-    implementation (libs.androidx.activity.compose)
-    implementation (libs.compose.ui.core)
-    implementation (libs.compose.ui.toolingpreview)
-    implementation (libs.compose.material3)
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation (libs.androidx.junit)
-    androidTestImplementation (libs.androidx.espresso)
-    androidTestImplementation (libs.compose.junit)
-    debugImplementation (libs.compose.ui.tooling)
-    debugImplementation (libs.compose.ui.testmanifest)
+    implementation(libs.compose.navigation)
+    implementation(libs.hilt.navigation)
+
+    implementation(libs.androidx.corektx)
+    implementation(libs.androidx.lifecycle.runtimektx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.compose.ui.core)
+    implementation(libs.compose.ui.toolingpreview)
+    implementation(libs.compose.material3)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso)
+    androidTestImplementation(libs.compose.junit)
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.testmanifest)
 }

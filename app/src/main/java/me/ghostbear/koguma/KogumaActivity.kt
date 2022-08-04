@@ -12,17 +12,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.components.ActivityComponent
+import me.ghostbear.koguma.ui.BottomNavigationBar
+import me.ghostbear.koguma.ui.Route
 import me.ghostbear.koguma.ui.main.MainScreen
+import me.ghostbear.koguma.ui.main.MainState
+import me.ghostbear.koguma.ui.main.MainStateImpl
 import me.ghostbear.koguma.ui.main.MainViewModel
+import me.ghostbear.koguma.ui.main.mainViewModel
+import me.ghostbear.koguma.ui.search.SearchScreen
 import me.ghostbear.koguma.ui.theme.KogumaTheme
 
 @AndroidEntryPoint
@@ -41,13 +51,29 @@ class KogumaActivity : ComponentActivity() {
 
         setContent {
             KogumaTheme {
-                // A surface container using the 'background' color from the theme
+                val navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
-                    MainScreen()
+                    Scaffold(
+                        bottomBar = {
+                            BottomNavigationBar(
+                                navController = navController,
+                            )
+                        }
+                    ) { paddingValues ->
+                        NavHost(navController = navController, startDestination = "home", modifier = Modifier.padding(paddingValues)) {
+                            composable(Route.Home.route) {
+                                MainScreen(
+                                    viewModel = mainViewModel(MainState() as MainStateImpl)
+                                )
+                            }
+                            composable(Route.Search.route) {
+                                SearchScreen()
+                            }
+                        }
+                    }
                 }
             }
         }

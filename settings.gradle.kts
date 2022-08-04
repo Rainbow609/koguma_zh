@@ -26,16 +26,20 @@ rootProject.name = "Koguma"
 include("", "app")
 
 fun VersionCatalogBuilder.androidx() {
-    library("androidx-viewmodel-compose","androidx.lifecycle", "lifecycle-viewmodel-compose").version("2.5.1")
-    library("androidx-corektx","androidx.core", "core-ktx").version("1.8.0")
-    library("androidx-lifecycle-runtimektx","androidx.lifecycle", "lifecycle-runtime-ktx").version("2.5.1")
-    library("androidx-activity-compose","androidx.activity", "activity-compose").version("1.5.1")
-    library("androidx-junit","androidx.test.ext", "junit").version("1.1.3")
-    library("androidx-espresso","androidx.test.espresso", "espresso-core").version("3.4.0")
+    library("androidx-viewmodel-compose", "androidx.lifecycle", "lifecycle-viewmodel-compose").version("2.5.1")
+    library("androidx-corektx", "androidx.core", "core-ktx").version("1.8.0")
+    library("androidx-lifecycle-runtimektx", "androidx.lifecycle", "lifecycle-runtime-ktx").version("2.5.1")
+    library("androidx-activity-compose", "androidx.activity", "activity-compose").version("1.5.1")
+    library("androidx-junit", "androidx.test.ext", "junit").version("1.1.3")
+    library("androidx-espresso", "androidx.test.espresso", "espresso-core").version("3.4.0")
 }
 
 fun VersionCatalogBuilder.compose() {
     val compose = version("compose", "1.2.0-rc02")
+
+    val navigation = version("navigation", "2.5.1")
+
+    library("compose-navigation", "androidx.navigation", "navigation-compose").versionRef(navigation)
 
     library("compose-icons", "androidx.compose.material", "material-icons-extended").versionRef(compose)
     library("compose-ui-core", "androidx.compose.ui", "ui").versionRef(compose)
@@ -49,10 +53,11 @@ fun VersionCatalogBuilder.compose() {
 fun VersionCatalogBuilder.hilt() {
     val hilt = version("hilt", "2.38.1")
 
-    library("hilt-android","com.google.dagger","hilt-android").versionRef(hilt)
-    library("hilt-compiler","com.google.dagger","hilt-compiler").versionRef(hilt)
+    library("hilt-android", "com.google.dagger", "hilt-android").versionRef(hilt)
+    library("hilt-compiler", "com.google.dagger", "hilt-compiler").versionRef(hilt)
+    library( "hilt-navigation", "androidx.hilt", "hilt-navigation-compose").version("1.0.0")
 }
 
 fun VersionCatalogBuilder.kotlinx() {
-    library("kotlinx-serialization","org.jetbrains.kotlinx","kotlinx-serialization-json").version("1.4.0-RC")
+    library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.4.0-RC")
 }

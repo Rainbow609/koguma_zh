@@ -9,4 +9,6 @@
     <string name="error_reading_file">Couldn\'t read file</string>
     <string name="error_decode_file">Couldn\'t decode file</string>
     <string name="internal_error">Internal Error</string>
+    <string name="screen_home">Home</string>
+    <string name="screen_search">Search</string>
 </resources>

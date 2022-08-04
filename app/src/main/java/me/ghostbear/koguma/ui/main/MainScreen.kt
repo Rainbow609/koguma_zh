@@ -8,7 +8,6 @@
 
 package me.ghostbear.koguma.ui.main
 
-import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,31 +22,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FileOpen
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -62,7 +52,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -80,7 +69,9 @@ import me.ghostbear.koguma.ui.main.MainViewModel.Event
 import me.ghostbear.koguma.util.toast
 
 @Composable
-fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainStateImpl)) {
+fun MainScreen(
+    viewModel: MainViewModel
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val onSave = f@{ uri: Uri ->
@@ -105,8 +96,7 @@ fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainState
 
     Scaffold(
         modifier = Modifier
-            .nestedScroll(topAppBarState.nestedScrollConnection)
-            .navigationBarsPadding(),
+            .nestedScroll(topAppBarState.nestedScrollConnection),
         topBar = {
             SmallTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
@@ -141,33 +131,6 @@ fun MainScreen(viewModel: MainViewModel = mainViewModel(MainState() as MainState
                 )
             }
         },
-        bottomBar = {
-            NavigationBar(
-                modifier = Modifier
-                    .navigationBarsPadding()
-            ) {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { context.toast("TODO") },
-                    icon = {
-                        Icon(Icons.Outlined.Home, contentDescription = "home")
-                    },
-                    label = {
-                        Text(text = "Home")
-                    }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { context.toast("TODO") },
-                    icon = {
-                        Icon(Icons.Outlined.Search, contentDescription = "home")
-                    },
-                    label = {
-                        Text(text = "Search")
-                    }
-                )
-            }
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
