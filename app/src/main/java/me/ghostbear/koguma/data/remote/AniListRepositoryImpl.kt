@@ -14,8 +14,8 @@ import javax.inject.Inject
 import me.ghostbear.koguma.data.remote.anilist.SearchForManga
 import me.ghostbear.koguma.data.remote.anilist.SearchForMangaQuery
 import me.ghostbear.koguma.data.remote.graphql.query
+import me.ghostbear.koguma.data.mangaRemoteLocalMapper
 import me.ghostbear.koguma.domain.model.Manga
-import me.ghostbear.koguma.domain.model.Status
 import me.ghostbear.koguma.domain.repository.AniListRepository
 
 class AniListRepositoryImpl @Inject constructor(
@@ -46,33 +46,7 @@ class AniListRepositoryImpl @Inject constructor(
         }
 
         return response.data.page?.media
-            ?.map {
-                Manga(
-                    title = it.title?.romaji,
-                    artist = it.staff?.edges
-                        ?.filter {
-                            it.role == "Story & Art" || it.role == "Art"
-                        }
-                        ?.mapNotNull { it.node?.name?.full }
-                        ?.joinToString(),
-                    author = it.staff?.edges
-                        ?.filter {
-                            it.role == "Story & Art" || it.role == "Story"
-                        }
-                        ?.mapNotNull { it.node?.name?.full }
-                        ?.joinToString(),
-                    description = it.description,
-                    genre = it.genres,
-                    status = when (it.status) {
-                        "FINISHED" -> Status.PublishingFinished
-                        "RELEASING" -> Status.Ongoing
-                        "NOT_YET_RELEASED" -> Status.Unknown
-                        "CANCELLED" -> Status.Cancelled
-                        "HIATUS" -> Status.OnHaitus
-                        else -> Status.Unknown
-                    }
-                )
-            } ?: emptyList()
+            ?.map(mangaRemoteLocalMapper) ?: emptyList()
     }
 
 }
