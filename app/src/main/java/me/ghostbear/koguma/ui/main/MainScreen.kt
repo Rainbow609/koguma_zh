@@ -210,7 +210,7 @@ fun MainScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(selected = viewModel.status == it, onClick = onClick)
-                    Text(text = it.name)
+                    Text(text = it.visualName)
                 }
             }
         }

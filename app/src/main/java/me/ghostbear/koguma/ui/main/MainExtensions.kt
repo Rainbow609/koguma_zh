@@ -11,12 +11,15 @@ package me.ghostbear.koguma.ui.main
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
 import me.ghostbear.koguma.KogumaActivity
+import me.ghostbear.koguma.R
 import me.ghostbear.koguma.domain.model.Manga
+import me.ghostbear.koguma.domain.model.Status
 
 @Composable
 fun mainViewModel(
@@ -58,3 +61,15 @@ fun MainState.setManga(manga: Manga) {
     genre = manga.genre?.joinToString()
     status = manga.status
 }
+
+val Status.visualName: String
+    @Composable
+    get() = when (this) {
+        Status.Unknown -> stringResource(id = R.string.status_unknown)
+        Status.Ongoing -> stringResource(id = R.string.status_ongoing)
+        Status.Completed -> stringResource(id = R.string.status_completed)
+        Status.Licensed -> stringResource(id = R.string.status_licensed)
+        Status.PublishingFinished -> stringResource(id = R.string.status_publishing_finished)
+        Status.Cancelled -> stringResource(id = R.string.status_cancelled)
+        Status.OnHaitus -> stringResource(id = R.string.status_on_haitus)
+    }
