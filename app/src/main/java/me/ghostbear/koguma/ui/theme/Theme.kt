@@ -10,6 +10,9 @@ package me.ghostbear.koguma.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+import android.view.Window
+import android.view.WindowInsetsController
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -69,7 +72,9 @@ fun KogumaTheme(
             val window = (view.context as Activity).window
             window.statusBarColor = Color.Transparent.toArgb()
             window.navigationBarColor = Color.Transparent.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme.not()
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            insetsController.isAppearanceLightStatusBars = darkTheme.not()
+            insetsController.isAppearanceLightNavigationBars = darkTheme.not()
         }
     }
 

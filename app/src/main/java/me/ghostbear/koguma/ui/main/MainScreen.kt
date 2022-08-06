@@ -38,6 +38,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -98,8 +100,12 @@ fun MainScreen(
         modifier = Modifier
             .nestedScroll(topAppBarState.nestedScrollConnection),
         topBar = {
+            val scrollFraction = topAppBarState.state.overlappedFraction
+            val backgroundColor by TopAppBarDefaults.smallTopAppBarColors().containerColor(scrollFraction)
             SmallTopAppBar(
-                modifier = Modifier.statusBarsPadding(),
+                modifier = Modifier
+                    .drawBehind { drawRect(backgroundColor) }
+                    .statusBarsPadding(),
                 title = {
                     Text(text = stringResource(id = R.string.app_name))
                 },
