@@ -6,9 +6,8 @@ The application uses AniList for getting metadata from online, but metadata can 
 
 ## Features
 
-- [x] Create JSON file for metadata
-- [x] Read JSON file for metadata
-- [ ] Load metadata from external sources (e.g. AniList)
+- Read/Write `details.json` for Tachiyomi Local Source
+- Search AniList for metadata
 
 ## Libraries
 
