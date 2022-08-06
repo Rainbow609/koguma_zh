@@ -11,9 +11,12 @@ package me.ghostbear.koguma.data.local
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toFile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.io.IOException
+import java.nio.channels.FileChannel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -56,27 +59,31 @@ class MangaRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun write(uri: Uri, manga: Manga) = withContext(Dispatchers.IO) {
-        try {
-            val outputStream = context.contentResolver.openOutputStream(uri) ?: throw NullPointerException("The provider recently crashed")
-            outputStream.use {
-                json.encodeToStream(manga, it)
+    override suspend fun write(uri: Uri, manga: Manga) {
+        withContext(Dispatchers.IO) {
+            try {
+                context.contentResolver.openFileDescriptor(uri, "w")?.use {
+                    FileOutputStream(it.fileDescriptor).use {
+                        it.channel.truncate(0)
+                        json.encodeToStream(manga, it)
+                    }
+                }
+            } catch (e: NullPointerException) {
+                Log.e("MangaRepositoryImpl", "", e)
+                throw e
+            } catch (e: FileNotFoundException) {
+                Log.e("MangaRepositoryImpl", "File was not found", e)
+                throw e
+            } catch (e: IOException) {
+                Log.e("MangaRepositoryImpl", "Couldn't write file", e)
+                throw e
+            } catch (e: SerializationException) {
+                Log.e("MangaRepositoryImpl", "Couldn't encode given object", e)
+                throw e
+            } catch (e: Exception) {
+                Log.e("MangaRepositoryImpl", "Unknown error writing file", e)
+                throw Exception(e)
             }
-        } catch (e: NullPointerException) {
-            Log.e("MangaRepositoryImpl", "", e)
-            throw e
-        } catch (e: FileNotFoundException) {
-            Log.e("MangaRepositoryImpl", "File was not found", e)
-            throw e
-        } catch (e: IOException) {
-            Log.e("MangaRepositoryImpl", "Couldn't write file", e)
-            throw e
-        } catch (e: SerializationException) {
-            Log.e("MangaRepositoryImpl", "Couldn't encode given object", e)
-            throw e
-        } catch (e: Exception) {
-            Log.e("MangaRepositoryImpl", "Unknown error writing file", e)
-            throw Exception(e)
         }
     }
 }
