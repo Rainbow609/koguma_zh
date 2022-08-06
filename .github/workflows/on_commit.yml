@@ -1,0 +1,42 @@
+name: CI
+on:
+  push:
+    branches: [ 'master' ]
+    tags-ignore:
+      - v*
+
+jobs:
+  build:
+    if: github.repository == 'ghostbear/koguma'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.4.1
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Build application
+        run: gradle assembleDebug
+
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/debug/
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk

@@ -1,0 +1,55 @@
+name: CI
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    if: github.repository == 'ghostbear/koguma'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.4.1
+        with:
+          distribution: 'temurin'
+          java-version: 11
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Build application
+        run: gradle assembleRelease
+
+      - name: Get tag name
+        run: |
+          set -x
+          echo "VERSION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Clean up build artifact
+        run: |
+          set -e
+          mv app/build/outputs/apk/release/app-release-unsigned-signed.apk koguma-${{ env.VERSION_TAG }}.apk
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION_TAG }}
+          name: Koguma ${{ env.VERSION_TAG }}
+          files: |
+            koguma-${{ env.VERSION_TAG }}.apk
+          draft: true
+          prerelease: false
