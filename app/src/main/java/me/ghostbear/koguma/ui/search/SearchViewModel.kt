@@ -8,10 +8,6 @@
 
 package me.ghostbear.koguma.ui.search
 
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -21,7 +17,6 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import me.ghostbear.koguma.domain.interactor.SearchOnlineManga
 import me.ghostbear.koguma.domain.model.Manga
-import me.ghostbear.koguma.ui.search.SearchViewModel.Dialog
 
 class SearchViewModel @AssistedInject constructor(
     @Assisted val state: SearchStateImpl,
@@ -56,20 +51,3 @@ class SearchViewModel @AssistedInject constructor(
     }
 }
 
-interface SearchState {
-    var searchQuery: String?
-    val result: List<Manga>
-    val isEmpty: Boolean
-    var dialog: Dialog?
-}
-
-fun SearchState(): SearchState {
-    return SearchStateImpl()
-}
-
-class SearchStateImpl : SearchState {
-    override var searchQuery: String? by mutableStateOf(null)
-    override var result: List<Manga> by mutableStateOf(emptyList())
-    override val isEmpty: Boolean by derivedStateOf { result.isEmpty() }
-    override var dialog: Dialog? by mutableStateOf(null)
-}

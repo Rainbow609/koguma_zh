@@ -8,6 +8,7 @@
 
 package me.ghostbear.koguma.ui.main
 
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +16,7 @@ import androidx.compose.runtime.setValue
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.model.Status
 
+@Stable
 interface MainState {
     var title: String?
     var author: String?
