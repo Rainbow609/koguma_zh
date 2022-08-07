@@ -12,6 +12,7 @@ interface SearchState {
     var searchQuery: String?
     val result: List<Manga>
     val isEmpty: Boolean
+    val isLoading: Boolean
     var dialog: SearchViewModel.Dialog?
 }
 
@@ -23,5 +24,6 @@ class SearchStateImpl : SearchState {
     override var searchQuery: String? by mutableStateOf(null)
     override var result: List<Manga> by mutableStateOf(emptyList())
     override val isEmpty: Boolean by derivedStateOf { result.isEmpty() }
+    override var isLoading: Boolean by mutableStateOf(false)
     override var dialog: SearchViewModel.Dialog? by mutableStateOf(null)
 }

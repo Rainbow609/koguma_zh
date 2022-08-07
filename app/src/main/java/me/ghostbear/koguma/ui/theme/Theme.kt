@@ -10,9 +10,6 @@ package me.ghostbear.koguma.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-import android.view.Window
-import android.view.WindowInsetsController
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme

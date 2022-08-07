@@ -10,7 +10,6 @@ package me.ghostbear.koguma
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,24 +20,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.components.ActivityComponent
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.ui.BottomNavigationBar
 import me.ghostbear.koguma.ui.Route
 import me.ghostbear.koguma.ui.main.MainScreen
@@ -102,9 +94,9 @@ class KogumaActivity : ComponentActivity() {
                         }
                     ) { paddingValues ->
                         NavHost(navController = navController, startDestination = Route.Home.route, modifier = Modifier.padding(paddingValues)) {
-                            composable(Route.Home.route) { currentBackStackEntry ->
+                            composable(Route.Home.route) {
                                 MainScreen(
-                                    viewModel = mainViewModel(MainState() as MainStateImpl, currentBackStackEntry)
+                                    viewModel = mainViewModel(MainState() as MainStateImpl)
                                 )
                             }
                             composable(Route.Search.route) { currentBackStackEntry ->
@@ -114,7 +106,7 @@ class KogumaActivity : ComponentActivity() {
                                 SearchScreen(
                                     navController = navController,
                                     mainViewModel = mainViewModel(MainState() as MainStateImpl, homeEntry),
-                                    viewModel = searchViewModel(SearchState() as SearchStateImpl, currentBackStackEntry)
+                                    viewModel = searchViewModel(SearchState() as SearchStateImpl)
                                 )
                             }
                         }

@@ -9,11 +9,9 @@
 package me.ghostbear.koguma.ui.search
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -26,7 +24,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -40,9 +40,11 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.Forest
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,25 +63,30 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import me.ghostbear.koguma.R
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.model.Status
 import me.ghostbear.koguma.ui.Route
-import me.ghostbear.koguma.ui.main.MainState
 import me.ghostbear.koguma.ui.main.MainViewModel
 import me.ghostbear.koguma.ui.main.setManga
 import me.ghostbear.koguma.ui.search.SearchViewModel.Dialog
+import me.ghostbear.koguma.ui.search.SearchViewModel.Event
+import me.ghostbear.koguma.util.plus
+import me.ghostbear.koguma.util.toast
 
 @Composable
 fun SearchScreen(
@@ -87,6 +94,7 @@ fun SearchScreen(
     viewModel: SearchViewModel,
     mainViewModel: MainViewModel
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val onSave = f@{ uri: Uri ->
         scope.launch {
@@ -111,73 +119,110 @@ fun SearchScreen(
                         }
                     }
                 )
-                else -> SmallTopAppBar(
-                    modifier = Modifier
-                        .statusBarsPadding(),
-                    navigationIcon = {
-                        IconButton(onClick = { viewModel.searchQuery = null }) {
-                            Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "back")
+                else -> {
+                    val focusRequester = remember { FocusRequester() }
+                    SmallTopAppBar(
+                        modifier = Modifier
+                            .statusBarsPadding(),
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                focusRequester.freeFocus()
+                                viewModel.searchQuery = null
+                            }) {
+                                Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "back")
+                            }
+                        },
+                        title = {
+                            BasicTextField(
+                                value = viewModel.searchQuery!!,
+                                onValueChange = { viewModel.searchQuery = it },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .focusRequester(focusRequester),
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                                keyboardActions = KeyboardActions(
+                                    onSearch = {
+                                        viewModel.search()
+                                        focusRequester.freeFocus()
+                                    }
+                                ),
+                                singleLine = true,
+                                textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
+                                cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground)
+                            )
+                        },
+                        actions = {
+                            IconButton(onClick = {
+                                viewModel.searchQuery = ""
+                                focusRequester.requestFocus()
+                            }) {
+                                Icon(imageVector = Icons.Outlined.Clear, contentDescription = "clear")
+                            }
                         }
-                    },
-                    title = {
-                        BasicTextField(
-                            value = viewModel.searchQuery!!,
-                            onValueChange = { viewModel.searchQuery = it },
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                            keyboardActions = KeyboardActions(
-                                onSearch = {
-                                    viewModel.search()
-                                }
-                            ),
-                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
-                            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground)
-                        )
-                    },
-                    actions = {
-                        IconButton(onClick = { viewModel.searchQuery = "" }) {
-                            Icon(imageVector = Icons.Outlined.Clear, contentDescription = "clear")
-                        }
+                    )
+                    LaunchedEffect(Unit) {
+                        delay(200)
+                        focusRequester.requestFocus()
                     }
-                )
+                }
             }
         },
     ) { paddingValues ->
-        Crossfade(targetState = viewModel.isEmpty, modifier = Modifier.padding(paddingValues)) { isEmpty ->
-            when (isEmpty) {
-                true -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "Result is empty. Start a search by clicking the search icon in the top right or if you already are try changing your query.")
-                    }
+        when {
+            viewModel.isLoading -> Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            viewModel.isEmpty -> Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Forest,
+                        contentDescription = "search",
+                        modifier = Modifier
+                            .size(128.dp)
+                    )
+                    Text(
+                        text = "Result is empty.\n Start a search by clicking the search icon in the top right or if you already are try changing your query.",
+                        textAlign = TextAlign.Center
+                    )
                 }
-                false -> {
-                    LazyColumn(
-                        contentPadding = PaddingValues(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(viewModel.result) { item ->
-                            SearchItem(
-                                manga = item,
-                                onClickEdit = {
-                                    if (mainViewModel.isSavable) {
-                                        viewModel.dialog = Dialog.Override(item)
-                                    } else {
-                                        mainViewModel.setManga(item)
-                                        navController.popBackStack(
-                                            route = Route.Home.route,
-                                            inclusive = false,
-                                            saveState = true
-                                        )
-                                    }
-                                },
-                                onClickSave = {
-                                    createDocumentLauncher.launch("details.json")
-                                }
-                            )
+            }
+            else -> LazyColumn(
+                contentPadding = PaddingValues(8.dp) + paddingValues,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(viewModel.result) { item ->
+                    SearchItem(
+                        manga = item,
+                        onClickEdit = {
+                            if (mainViewModel.isSavable) {
+                                viewModel.dialog = Dialog.Override(item)
+                            } else {
+                                mainViewModel.setManga(item)
+                                navController.popBackStack(
+                                    route = Route.Home.route,
+                                    inclusive = false,
+                                    saveState = true
+                                )
+                            }
+                        },
+                        onClickSave = {
+                            createDocumentLauncher.launch("details.json")
                         }
-                    }
+                    )
                 }
             }
         }
@@ -212,6 +257,14 @@ fun SearchScreen(
                 Text(text = "You are about to override the current form. Are you sure you want to override it?")
             }
         )
+    }
+    LaunchedEffect(Unit) {
+        viewModel.events.collectLatest { event ->
+            when (event) {
+                is Event.InternalError -> context.toast(event.error.message ?: context.getString(R.string.internal_error))
+                is Event.LocalizedMessage -> context.toast(event.id)
+            }
+        }
     }
 }
 

@@ -12,8 +12,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.ghostbear.koguma.data.remote.AniListRepositoryImpl
 import me.ghostbear.koguma.data.local.MangaRepositoryImpl
+import me.ghostbear.koguma.data.remote.AniListRepositoryImpl
 import me.ghostbear.koguma.domain.repository.AniListRepository
 import me.ghostbear.koguma.domain.repository.MangaRepository
 

@@ -11,12 +11,10 @@ package me.ghostbear.koguma.data.local
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.core.net.toFile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.nio.channels.FileChannel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

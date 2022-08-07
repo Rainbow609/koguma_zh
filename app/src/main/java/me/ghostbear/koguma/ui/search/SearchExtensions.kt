@@ -11,29 +11,29 @@ package me.ghostbear.koguma.ui.search
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
 import me.ghostbear.koguma.KogumaActivity
 import me.ghostbear.koguma.domain.model.Manga
+import me.ghostbear.koguma.util.hiltViewModel
 
 @Composable
 fun searchViewModel(
     state: SearchStateImpl,
-    navBackStackEntry: NavBackStackEntry
+    viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+    }
 ): SearchViewModel {
     val view = LocalView.current
     val factory = EntryPointAccessors.fromActivity(
         (view.context as Activity),
         KogumaActivity.ViewModelFactoryProvider::class.java
     ).searchViewModelFactory()
-    return viewModel(factory = HiltViewModelFactory.createInternal(
-        (view.context as Activity),
-        navBackStackEntry,
-        navBackStackEntry.arguments,
+    return hiltViewModel(
+        viewModelStoreOwner,
         SearchViewModel.provideFactory(factory, state)
-    ))
+    )
 }
 
 val Manga.authorWithArtist: String

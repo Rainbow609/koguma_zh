@@ -12,33 +12,30 @@ import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
 import me.ghostbear.koguma.KogumaActivity
 import me.ghostbear.koguma.R
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.model.Status
+import me.ghostbear.koguma.util.hiltViewModel
 
 @Composable
 fun mainViewModel(
     state: MainStateImpl,
-    navBackStackEntry: NavBackStackEntry
+    viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+    }
 ): MainViewModel {
     val view = LocalView.current
     val factory = EntryPointAccessors.fromActivity(
         (view.context as Activity),
         KogumaActivity.ViewModelFactoryProvider::class.java
     ).mainViewModelFactory()
-    return viewModel(
-        viewModelStoreOwner = navBackStackEntry,
-        factory = HiltViewModelFactory.createInternal(
-            (view.context as Activity),
-            navBackStackEntry,
-            navBackStackEntry.arguments,
-            MainViewModel.provideFactory(factory, state)
-        )
+    return hiltViewModel(
+        viewModelStoreOwner = viewModelStoreOwner,
+        delegateFactory = MainViewModel.provideFactory(factory, state)
     )
 }
 
