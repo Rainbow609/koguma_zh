@@ -32,11 +32,10 @@ fun VersionCatalogBuilder.aboutLibraries() {
     val version = version("aboutlibraries", "10.4.0")
 
     library("aboutlibraries-core", "com.mikepenz", "aboutlibraries-core").versionRef(version)
-    library("aboutlibraries-compose", "com.mikepenz", "aboutlibraries-compose").versionRef(version)
 
     plugin("aboutlibraries", "com.mikepenz.aboutlibraries.plugin").versionRef(version)
 
-    bundle("aboutlibraries", listOf("aboutlibraries-core", "aboutlibraries-compose"))
+    bundle("aboutlibraries", listOf("aboutlibraries-core"))
 }
 
 fun VersionCatalogBuilder.androidx() {

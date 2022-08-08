@@ -90,7 +90,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.ui.core)
     implementation(libs.compose.ui.toolingpreview)
-    implementation("androidx.compose.material:material:1.2.0")
     implementation(libs.compose.material3)
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation(libs.androidx.junit)
