@@ -12,6 +12,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -76,7 +77,17 @@ sealed class Route(val route: String, @StringRes val textId: Int, val icon: @Com
         textId = R.string.screen_search,
         icon = { Icon(Icons.Outlined.Search, contentDescription = "search") }
     )
+    object About : Route(
+        route = "about",
+        textId = R.string.screen_about,
+        icon = { Icon(Icons.Outlined.Person, contentDescription = "about") }
+    )
+    object Libraries : Route(
+        route = "libraries",
+        textId = 0,
+        icon = {}
+    )
     companion object {
-        val rootScreens = listOf(Home, Search)
+        val rootScreens = listOf(Home, Search, About)
     }
 }

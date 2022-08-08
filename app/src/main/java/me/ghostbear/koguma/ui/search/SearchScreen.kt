@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -50,7 +49,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -81,6 +79,7 @@ import me.ghostbear.koguma.R
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.model.Status
 import me.ghostbear.koguma.ui.Route
+import me.ghostbear.koguma.ui.SmallAppBar
 import me.ghostbear.koguma.ui.main.MainViewModel
 import me.ghostbear.koguma.ui.main.setManga
 import me.ghostbear.koguma.ui.search.SearchViewModel.Dialog
@@ -107,9 +106,7 @@ fun SearchScreen(
     Scaffold(
         topBar = {
             when {
-                viewModel.searchQuery == null -> SmallTopAppBar(
-                    modifier = Modifier
-                        .statusBarsPadding(),
+                viewModel.searchQuery == null -> SmallAppBar(
                     title = {
                         Text(text = stringResource(id = R.string.app_name))
                     },
@@ -121,9 +118,7 @@ fun SearchScreen(
                 )
                 else -> {
                     val focusRequester = remember { FocusRequester() }
-                    SmallTopAppBar(
-                        modifier = Modifier
-                            .statusBarsPadding(),
+                    SmallAppBar(
                         navigationIcon = {
                             IconButton(onClick = {
                                 focusRequester.freeFocus()

@@ -1,9 +1,12 @@
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
-    kotlin("plugin.serialization") version "1.6.21"
+    kotlin("plugin.serialization") version "1.7.10"
+    alias(libs.plugins.aboutlibraries)
 }
 
 android {
@@ -51,7 +54,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.get()
+        kotlinCompilerExtensionVersion = "1.3.0-rc02"
     }
     packagingOptions {
         resources {
@@ -76,11 +79,18 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.hilt.navigation)
 
+    implementation(libs.bundles.aboutlibraries)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtimektx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.ui.core)
     implementation(libs.compose.ui.toolingpreview)
+    implementation("androidx.compose.material:material:1.2.0")
     implementation(libs.compose.material3)
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation(libs.androidx.junit)

@@ -14,8 +14,10 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
+            aboutLibraries()
             androidx()
             compose()
+            firebase()
             hilt()
             kotlinx()
             ktor()
@@ -25,6 +27,17 @@ dependencyResolutionManagement {
 
 rootProject.name = "Koguma"
 include("", "app")
+
+fun VersionCatalogBuilder.aboutLibraries() {
+    val version = version("aboutlibraries", "10.4.0")
+
+    library("aboutlibraries-core", "com.mikepenz", "aboutlibraries-core").versionRef(version)
+    library("aboutlibraries-compose", "com.mikepenz", "aboutlibraries-compose").versionRef(version)
+
+    plugin("aboutlibraries", "com.mikepenz.aboutlibraries.plugin").versionRef(version)
+
+    bundle("aboutlibraries", listOf("aboutlibraries-core", "aboutlibraries-compose"))
+}
 
 fun VersionCatalogBuilder.androidx() {
     library("androidx-viewmodel-compose", "androidx.lifecycle", "lifecycle-viewmodel-compose").version("2.5.1")
@@ -36,7 +49,7 @@ fun VersionCatalogBuilder.androidx() {
 }
 
 fun VersionCatalogBuilder.compose() {
-    val compose = version("compose", "1.2.0-rc02")
+    val compose = version("compose", "1.2.0")
 
     val navigation = version("navigation", "2.5.1")
 
@@ -51,8 +64,14 @@ fun VersionCatalogBuilder.compose() {
     library("compose-ui-testmanifest", "androidx.compose.ui", "ui-test-manifest").versionRef(compose)
 }
 
+fun VersionCatalogBuilder.firebase() {
+    library("firebase-bom", "com.google.firebase", "firebase-bom").version("30.3.1")
+    library("firebase-analytics", "com.google.firebase", "firebase-analytics-ktx").version("")
+    library("firebase-crashlytics", "com.google.firebase", "firebase-crashlytics-ktx").version("")
+}
+
 fun VersionCatalogBuilder.hilt() {
-    val hilt = version("hilt", "2.38.1")
+    val hilt = version("hilt", "2.43.2")
 
     library("hilt-android", "com.google.dagger", "hilt-android").versionRef(hilt)
     library("hilt-compiler", "com.google.dagger", "hilt-compiler").versionRef(hilt)
@@ -72,7 +91,7 @@ fun VersionCatalogBuilder.ktor() {
     library("ktor-content-negotiation", "io.ktor", "ktor-client-content-negotiation").versionRef(ktor)
     library("ktor-serialization", "io.ktor", "ktor-serialization-kotlinx-json").versionRef(ktor)
 
-    library("ktor-logging","io.ktor","ktor-client-logging").versionRef(ktor)
+    library("ktor-logging", "io.ktor", "ktor-client-logging").versionRef(ktor)
 
     bundle("ktor", listOf("ktor-core", "ktor-cio", "ktor-content-negotiation", "ktor-serialization", "ktor-logging"))
 }

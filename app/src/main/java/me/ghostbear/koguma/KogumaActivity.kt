@@ -12,12 +12,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +37,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ghostbear.koguma.ui.BottomNavigationBar
 import me.ghostbear.koguma.ui.Route
+import me.ghostbear.koguma.ui.about.AboutScreen
+import me.ghostbear.koguma.ui.libraries.LibrariesScreen
 import me.ghostbear.koguma.ui.main.MainScreen
 import me.ghostbear.koguma.ui.main.MainState
 import me.ghostbear.koguma.ui.main.MainStateImpl
@@ -88,9 +94,18 @@ class KogumaActivity : ComponentActivity() {
                 ) {
                     Scaffold(
                         bottomBar = {
-                            BottomNavigationBar(
-                                navController = navController,
-                            )
+                            val visible = remember(navController.currentDestination) {
+                                navController.currentDestination?.route !in Route.rootScreens.map(Route::route)
+                            }
+                            AnimatedVisibility(
+                                visible = visible,
+                                enter = expandVertically(expandFrom = Alignment.Bottom),
+                                exit = shrinkVertically(shrinkTowards = Alignment.Bottom)
+                            ) {
+                                BottomNavigationBar(
+                                    navController = navController,
+                                )
+                            }
                         }
                     ) { paddingValues ->
                         NavHost(navController = navController, startDestination = Route.Home.route, modifier = Modifier.padding(paddingValues)) {
@@ -108,6 +123,12 @@ class KogumaActivity : ComponentActivity() {
                                     mainViewModel = mainViewModel(MainState() as MainStateImpl, homeEntry),
                                     viewModel = searchViewModel(SearchState() as SearchStateImpl)
                                 )
+                            }
+                            composable(Route.About.route) {
+                                AboutScreen(navController)
+                            }
+                            composable(Route.Libraries.route) {
+                                LibrariesScreen(navController)
                             }
                         }
                     }
