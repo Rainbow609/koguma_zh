@@ -11,8 +11,6 @@ package me.ghostbear.koguma.data.remote
 import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.network.sockets.ConnectTimeoutException
-import java.io.IOException
-import javax.inject.Inject
 import me.ghostbear.koguma.data.mangaRemoteLocalMapper
 import me.ghostbear.koguma.data.remote.anilist.SearchForManga
 import me.ghostbear.koguma.data.remote.anilist.SearchForMangaQuery
@@ -20,6 +18,8 @@ import me.ghostbear.koguma.data.remote.graphql.GraphQLException
 import me.ghostbear.koguma.data.remote.graphql.query
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.AniListRepository
+import java.io.IOException
+import javax.inject.Inject
 
 class AniListRepositoryImpl @Inject constructor(
     private val httpClient: HttpClient,
@@ -62,5 +62,4 @@ class AniListRepositoryImpl @Inject constructor(
         return response.data.page?.media
             ?.map(mangaRemoteLocalMapper) ?: emptyList()
     }
-
 }

@@ -1,0 +1,5 @@
+[*.{kt,kts}]
+indent_size=4
+insert_final_newline=true
+ij_java_use_single_class_imports = true
+ij_groovy_use_single_class_imports = true

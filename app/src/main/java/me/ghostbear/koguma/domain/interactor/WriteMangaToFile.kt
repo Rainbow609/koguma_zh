@@ -9,12 +9,12 @@
 package me.ghostbear.koguma.domain.interactor
 
 import android.net.Uri
-import java.io.FileNotFoundException
-import java.io.IOException
-import javax.inject.Inject
 import kotlinx.serialization.SerializationException
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.MangaRepository
+import java.io.FileNotFoundException
+import java.io.IOException
+import javax.inject.Inject
 
 class WriteMangaToFile @Inject constructor(
     private val mangaRepository: MangaRepository
@@ -24,7 +24,7 @@ class WriteMangaToFile @Inject constructor(
         return try {
             mangaRepository.write(uri, manga)
             Result.Success
-        }  catch (e: FileNotFoundException) {
+        } catch (e: FileNotFoundException) {
             Result.FileNotFound
         } catch (e: IOException) {
             Result.CouldntWriteFile
@@ -42,5 +42,4 @@ class WriteMangaToFile @Inject constructor(
         object FileNotFound : Result()
         object Success : Result()
     }
-
 }

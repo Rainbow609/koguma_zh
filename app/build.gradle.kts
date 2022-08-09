@@ -98,3 +98,9 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.testmanifest)
 }
+
+tasks {
+    preBuild {
+        dependsOn(ktlintFormat)
+    }
+}

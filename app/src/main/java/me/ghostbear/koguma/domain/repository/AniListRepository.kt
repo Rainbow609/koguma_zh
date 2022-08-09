@@ -13,5 +13,4 @@ import me.ghostbear.koguma.domain.model.Manga
 interface AniListRepository {
 
     suspend fun search(query: String): List<Manga>
-
 }

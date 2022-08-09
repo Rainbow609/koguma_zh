@@ -12,10 +12,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
@@ -24,6 +20,10 @@ import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.MangaRepository
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import javax.inject.Inject
 
 class MangaRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,

@@ -175,7 +175,7 @@ fun MainScreen(
                             if (index != strings.lastIndex) append(", ")
                         }
                     }
-                    val offsetMapping =  object : OffsetMapping {
+                    val offsetMapping = object : OffsetMapping {
                         override fun originalToTransformed(offset: Int): Int = transformed.length
 
                         override fun transformedToOriginal(offset: Int): Int = it.length

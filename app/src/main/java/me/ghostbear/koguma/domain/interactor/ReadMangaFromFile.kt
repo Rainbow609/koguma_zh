@@ -9,12 +9,12 @@
 package me.ghostbear.koguma.domain.interactor
 
 import android.net.Uri
-import java.io.FileNotFoundException
-import java.io.IOException
-import javax.inject.Inject
 import kotlinx.serialization.SerializationException
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.MangaRepository
+import java.io.FileNotFoundException
+import java.io.IOException
+import javax.inject.Inject
 
 class ReadMangaFromFile @Inject constructor(
     private val mangaRepository: MangaRepository
@@ -41,9 +41,8 @@ class ReadMangaFromFile @Inject constructor(
         data class InternalError(val error: Throwable) : Result()
         object CouldntDecodeFile : Result()
         object CouldntReadFile : Result()
-        object FileMalformed: Result()
+        object FileMalformed : Result()
         object FileNotFound : Result()
         data class Success(val manga: Manga) : Result()
     }
-
 }

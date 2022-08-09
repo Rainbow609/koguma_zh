@@ -288,7 +288,6 @@ fun SearchItem(
                     text = manga.status.name,
                     style = MaterialTheme.typography.bodySmall
                 )
-
         }
 
         AnimatedVisibility(

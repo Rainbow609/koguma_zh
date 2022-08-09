@@ -64,11 +64,10 @@ class SearchViewModel @AssistedInject constructor(
         fun provideFactory(
             assistedFactory: Factory,
             state: SearchStateImpl
-        ): ViewModelProvider.Factory = object :ViewModelProvider.Factory {
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(state) as T
             }
         }
     }
 }
-

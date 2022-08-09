@@ -9,11 +9,11 @@
 package me.ghostbear.koguma.domain.interactor
 
 import io.ktor.client.network.sockets.ConnectTimeoutException
-import java.io.IOException
-import javax.inject.Inject
 import me.ghostbear.koguma.data.remote.graphql.GraphQLException
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.AniListRepository
+import java.io.IOException
+import javax.inject.Inject
 
 class SearchOnlineManga @Inject constructor(
     private val aniListRepository: AniListRepository
@@ -44,5 +44,4 @@ class SearchOnlineManga @Inject constructor(
         object IllegalResponse : Result()
         data class Success(val list: List<Manga>) : Result()
     }
-
 }

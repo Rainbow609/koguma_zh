@@ -26,5 +26,4 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindAniListRepository(aniListRepositoryImpl: AniListRepositoryImpl): AniListRepository
-
 }

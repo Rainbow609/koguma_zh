@@ -8,7 +8,6 @@
 
 package me.ghostbear.koguma.domain.model
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -27,5 +26,3 @@ data class Manga(
     @SerialName("status")
     val status: Status? = null
 )
-
-

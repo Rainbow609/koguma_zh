@@ -9,7 +9,7 @@ The application uses AniList for getting metadata from online, but metadata can 
 - Read/Write `details.json` for Tachiyomi Local Source
 - Search AniList for metadata
 
-## Libraries
+## Development
 
 - Coroutines for asynchronous work
 - Hilt for dependency injection
@@ -18,6 +18,7 @@ The application uses AniList for getting metadata from online, but metadata can 
 - Jetpack Compose for creating the UI
 - Jetpack Compose Navigation for navigating between screens
 - Version Catalog for dependency management
+- ktlint for checking/formatting code style
 
 ## License
 

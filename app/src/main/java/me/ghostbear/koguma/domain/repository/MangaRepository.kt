@@ -16,5 +16,4 @@ interface MangaRepository {
     suspend fun read(uri: Uri): Manga
 
     suspend fun write(uri: Uri, manga: Manga)
-
 }

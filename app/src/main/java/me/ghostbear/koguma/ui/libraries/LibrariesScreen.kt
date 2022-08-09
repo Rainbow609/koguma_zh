@@ -58,7 +58,7 @@ fun LibrariesScreen(navController: NavHostController) {
             LibraryList(
                 libraries = libraries,
                 contentValues = paddingValues + WindowInsets.navigationBars.asPaddingValues(),
-                onClickItem = { library ->  dialog.value = library }
+                onClickItem = { library -> dialog.value = library }
             )
         }
     }

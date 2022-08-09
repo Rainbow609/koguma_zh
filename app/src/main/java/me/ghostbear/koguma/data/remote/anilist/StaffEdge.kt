@@ -8,7 +8,6 @@
 
 package me.ghostbear.koguma.data.remote.anilist
 
-
 import kotlinx.serialization.Serializable
 
 @Serializable
