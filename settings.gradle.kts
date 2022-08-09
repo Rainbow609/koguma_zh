@@ -14,6 +14,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
+            general()
             aboutLibraries()
             androidx()
             compose()
@@ -28,6 +29,12 @@ dependencyResolutionManagement {
 rootProject.name = "Koguma"
 include("", "app")
 
+fun VersionCatalogBuilder.general() {
+    library("junit", "junit", "junit").version("4.13.2")
+
+    plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("10.3.0")
+}
+
 fun VersionCatalogBuilder.aboutLibraries() {
     val version = version("aboutlibraries", "10.4.0")
 
@@ -39,12 +46,17 @@ fun VersionCatalogBuilder.aboutLibraries() {
 }
 
 fun VersionCatalogBuilder.androidx() {
+    val agp = version("agp", "7.3.0-beta05")
+
     library("androidx-viewmodel-compose", "androidx.lifecycle", "lifecycle-viewmodel-compose").version("2.5.1")
     library("androidx-corektx", "androidx.core", "core-ktx").version("1.8.0")
     library("androidx-lifecycle-runtimektx", "androidx.lifecycle", "lifecycle-runtime-ktx").version("2.5.1")
     library("androidx-activity-compose", "androidx.activity", "activity-compose").version("1.5.1")
     library("androidx-junit", "androidx.test.ext", "junit").version("1.1.3")
     library("androidx-espresso", "androidx.test.espresso", "espresso-core").version("3.4.0")
+
+    plugin("android-application", "com.android.application").versionRef(agp)
+    plugin("android-library", "com.android.library").versionRef(agp)
 }
 
 fun VersionCatalogBuilder.compose() {
@@ -64,9 +76,17 @@ fun VersionCatalogBuilder.compose() {
 }
 
 fun VersionCatalogBuilder.firebase() {
+    library("google-services", "com.google.gms", "google-services").version("4.3.13")
+
     library("firebase-bom", "com.google.firebase", "firebase-bom").version("30.3.2")
-    library("firebase-analytics", "com.google.firebase", "firebase-analytics-ktx").version("")
-    library("firebase-crashlytics", "com.google.firebase", "firebase-crashlytics-ktx").version("")
+    library("firebase-analytics-ktx", "com.google.firebase", "firebase-analytics-ktx").version("")
+    library("firebase-crashlytics-ktx", "com.google.firebase", "firebase-crashlytics-ktx").version("")
+    library("firebase-crashlytics-gradle", "com.google.firebase", "firebase-crashlytics-gradle").version("2.9.1")
+
+    plugin("google-services", "com.google.gms.google-services").version("")
+    plugin("firebase-crashlytics", "com.google.firebase.crashlytics").version("")
+
+    bundle("firebase", listOf("firebase-analytics-ktx", "firebase-crashlytics-ktx"))
 }
 
 fun VersionCatalogBuilder.hilt() {
@@ -75,10 +95,18 @@ fun VersionCatalogBuilder.hilt() {
     library("hilt-android", "com.google.dagger", "hilt-android").versionRef(hilt)
     library("hilt-compiler", "com.google.dagger", "hilt-compiler").versionRef(hilt)
     library("hilt-navigation", "androidx.hilt", "hilt-navigation-compose").version("1.0.0")
+
+    plugin("hilt", "com.google.dagger.hilt.android").versionRef(hilt)
 }
 
 fun VersionCatalogBuilder.kotlinx() {
+    val kotlin = version("kotlin", "1.7.10")
+
     library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.4.0-RC")
+
+    plugin("kotlinx-serialization", "org.jetbrains.kotlin.plugin.serialization").versionRef(kotlin)
+    plugin("kotlin-android", "org.jetbrains.kotlin.android").versionRef(kotlin)
+    plugin("kotlin-kapt", "org.jetbrains.kotlin.kapt").version("")
 }
 
 fun VersionCatalogBuilder.ktor() {

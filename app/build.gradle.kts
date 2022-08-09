@@ -1,11 +1,12 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    kotlin("android")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
-    kotlin("plugin.serialization") version "1.7.10"
+    id(libs.plugins.android.application.get().pluginId)
+    id(libs.plugins.google.services.get().pluginId)
+    id(libs.plugins.firebase.crashlytics.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.aboutlibraries)
 }
 
@@ -82,8 +83,7 @@ dependencies {
     implementation(libs.bundles.aboutlibraries)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    implementation(libs.bundles.firebase)
 
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtimektx)
@@ -91,7 +91,7 @@ dependencies {
     implementation(libs.compose.ui.core)
     implementation(libs.compose.ui.toolingpreview)
     implementation(libs.compose.material3)
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso)
     androidTestImplementation(libs.compose.junit)
