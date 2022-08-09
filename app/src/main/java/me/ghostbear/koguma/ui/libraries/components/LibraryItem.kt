@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.entity.Library
+import me.ghostbear.koguma.ui.libraries.creator
 
 @Composable
 fun LibraryItem(
@@ -29,17 +31,19 @@ fun LibraryItem(
             Text(
                 text = library.name,
                 modifier = Modifier.weight(0.1f),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             val version = library.artifactVersion
             if (version != null) {
                 Text(text = version)
             }
         }
-        Text(
-            text = library.developers.takeIf { it.isNotEmpty() }?.map { it.name }?.joinToString()
-                ?: library.organization?.name ?: ""
-        )
+        val creator = library.creator
+        if (creator.isNotEmpty()) {
+            Text(text = creator)
+        }
         Row(
             modifier = Modifier
                 .padding(top = 8.dp)

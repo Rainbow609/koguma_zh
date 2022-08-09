@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mikepenz.aboutlibraries.entity.Library
+import me.ghostbear.koguma.ui.libraries.licenseContentAsHtml
 import me.ghostbear.koguma.util.decodeHtml
 
 @Composable
@@ -29,14 +30,7 @@ fun LicenseDialog(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = library.licenses
-                        .firstOrNull()
-                        ?.licenseContent
-                        ?.replace("\n", "<br />")
-                        .orEmpty()
-                        .decodeHtml()
-                )
+                Text(text = library.licenseContentAsHtml.decodeHtml())
             }
         }
     )
