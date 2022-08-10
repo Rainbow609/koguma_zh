@@ -37,6 +37,7 @@ object ApplicationModule {
     @Singleton
     fun provideHttpClient(json: Json): HttpClient {
         return HttpClient(CIO) {
+            expectSuccess = true
             install(ContentNegotiation) {
                 json(json)
             }

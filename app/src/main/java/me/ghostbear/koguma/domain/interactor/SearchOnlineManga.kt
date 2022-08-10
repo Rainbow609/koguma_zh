@@ -9,7 +9,10 @@
 package me.ghostbear.koguma.domain.interactor
 
 import io.ktor.client.network.sockets.ConnectTimeoutException
-import me.ghostbear.koguma.data.remote.graphql.GraphQLException
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ServerResponseException
+import kotlinx.serialization.SerializationException
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.AniListRepository
 import java.io.IOException
@@ -25,10 +28,16 @@ class SearchOnlineManga @Inject constructor(
             Result.Success(list)
         } catch (e: ConnectTimeoutException) {
             Result.ConnectionTimeout
+        } catch (e: RedirectResponseException) {
+            Result.ClientRedirected
+        } catch (e: ClientRequestException) {
+            Result.ClientError
+        } catch (e: ServerResponseException) {
+            Result.ServerError
+        } catch (e: SerializationException) {
+            Result.ContentMalformed
         } catch (e: IOException) {
-            Result.NetworkError
-        } catch (e: GraphQLException) {
-            Result.GraphQLQueryMalformed
+            Result.UnknownNetworkError
         } catch (e: IllegalArgumentException) {
             Result.IllegalResponse
         } catch (e: Exception) {
@@ -39,8 +48,11 @@ class SearchOnlineManga @Inject constructor(
     sealed class Result {
         data class Error(val error: Throwable) : Result()
         object ConnectionTimeout : Result()
-        object NetworkError : Result()
-        object GraphQLQueryMalformed : Result()
+        object ClientRedirected : Result()
+        object ClientError : Result()
+        object ServerError : Result()
+        object ContentMalformed : Result()
+        object UnknownNetworkError : Result()
         object IllegalResponse : Result()
         data class Success(val list: List<Manga>) : Result()
     }

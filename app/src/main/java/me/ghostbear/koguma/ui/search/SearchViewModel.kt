@@ -37,9 +37,12 @@ class SearchViewModel @AssistedInject constructor(
             when (val result = searchOnlineManga.await(searchQuery ?: "")) {
                 is SearchOnlineManga.Result.Error -> _events.send(Event.InternalError(result.error))
                 SearchOnlineManga.Result.ConnectionTimeout -> _events.send(Event.LocalizedMessage(R.string.error_connection_timeout))
-                SearchOnlineManga.Result.GraphQLQueryMalformed -> _events.send(Event.LocalizedMessage(R.string.error_query_malformed))
+                SearchOnlineManga.Result.ClientRedirected -> _events.send(Event.LocalizedMessage(R.string.error_client_redirect))
+                SearchOnlineManga.Result.ClientError -> _events.send(Event.LocalizedMessage(R.string.error_client_network))
+                SearchOnlineManga.Result.ServerError -> _events.send(Event.LocalizedMessage(R.string.error_server_network))
+                SearchOnlineManga.Result.ContentMalformed -> _events.send(Event.LocalizedMessage(R.string.error_response_malformed))
                 SearchOnlineManga.Result.IllegalResponse -> _events.send(Event.LocalizedMessage(R.string.error_illegal_response))
-                SearchOnlineManga.Result.NetworkError -> _events.send(Event.LocalizedMessage(R.string.error_network))
+                SearchOnlineManga.Result.UnknownNetworkError -> _events.send(Event.LocalizedMessage(R.string.error_network))
                 is SearchOnlineManga.Result.Success -> state.result = result.list
             }
             state.isLoading = false
