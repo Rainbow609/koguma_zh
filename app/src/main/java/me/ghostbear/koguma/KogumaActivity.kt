@@ -35,22 +35,22 @@ import dagger.hilt.android.components.ActivityComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.ghostbear.koguma.ui.BottomNavigationBar
-import me.ghostbear.koguma.ui.Route
-import me.ghostbear.koguma.ui.about.AboutScreen
-import me.ghostbear.koguma.ui.libraries.LibrariesScreen
-import me.ghostbear.koguma.ui.main.MainScreen
-import me.ghostbear.koguma.ui.main.MainState
-import me.ghostbear.koguma.ui.main.MainStateImpl
-import me.ghostbear.koguma.ui.main.MainViewModel
-import me.ghostbear.koguma.ui.main.mainViewModel
-import me.ghostbear.koguma.ui.search.SearchScreen
-import me.ghostbear.koguma.ui.search.SearchState
-import me.ghostbear.koguma.ui.search.SearchStateImpl
-import me.ghostbear.koguma.ui.search.SearchViewModel
-import me.ghostbear.koguma.ui.search.searchViewModel
-import me.ghostbear.koguma.ui.theme.KogumaTheme
-import me.ghostbear.koguma.util.toast
+import me.ghostbear.koguma.extensions.mainViewModel
+import me.ghostbear.koguma.extensions.searchViewModel
+import me.ghostbear.koguma.extensions.toast
+import me.ghostbear.koguma.presentation.BottomNavigationBar
+import me.ghostbear.koguma.presentation.Route
+import me.ghostbear.koguma.presentation.about.AboutScreen
+import me.ghostbear.koguma.presentation.libraries.LibrariesScreen
+import me.ghostbear.koguma.presentation.main.MainScreen
+import me.ghostbear.koguma.presentation.main.MainState
+import me.ghostbear.koguma.presentation.main.MainStateImpl
+import me.ghostbear.koguma.presentation.main.MainViewModel
+import me.ghostbear.koguma.presentation.search.SearchScreen
+import me.ghostbear.koguma.presentation.search.SearchState
+import me.ghostbear.koguma.presentation.search.SearchStateImpl
+import me.ghostbear.koguma.presentation.search.SearchViewModel
+import me.ghostbear.koguma.presentation.theme.KogumaTheme
 
 @AndroidEntryPoint
 class KogumaActivity : ComponentActivity() {
@@ -95,7 +95,9 @@ class KogumaActivity : ComponentActivity() {
                     Scaffold(
                         bottomBar = {
                             val visible = remember(navController.currentDestination) {
-                                navController.currentDestination?.route !in Route.rootScreens.map(Route::route)
+                                navController.currentDestination?.route !in Route.rootScreens.map(
+                                    me.ghostbear.koguma.presentation.Route::route
+                                )
                             }
                             AnimatedVisibility(
                                 visible = visible,
@@ -108,10 +110,16 @@ class KogumaActivity : ComponentActivity() {
                             }
                         }
                     ) { paddingValues ->
-                        NavHost(navController = navController, startDestination = Route.Home.route, modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = Route.Home.route,
+                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+                        ) {
                             composable(Route.Home.route) {
                                 MainScreen(
-                                    viewModel = mainViewModel(MainState() as MainStateImpl)
+                                    viewModel = mainViewModel(
+                                        MainState() as MainStateImpl
+                                    )
                                 )
                             }
                             composable(Route.Search.route) { currentBackStackEntry ->
@@ -120,15 +128,22 @@ class KogumaActivity : ComponentActivity() {
                                 }
                                 SearchScreen(
                                     navController = navController,
-                                    mainViewModel = mainViewModel(MainState() as MainStateImpl, homeEntry),
-                                    viewModel = searchViewModel(SearchState() as SearchStateImpl)
+                                    mainViewModel = mainViewModel(
+                                        MainState() as MainStateImpl,
+                                        homeEntry
+                                    ),
+                                    viewModel = searchViewModel(
+                                        SearchState() as SearchStateImpl
+                                    )
                                 )
                             }
                             composable(Route.About.route) {
                                 AboutScreen(navController)
                             }
                             composable(Route.Libraries.route) {
-                                LibrariesScreen(navController)
+                                LibrariesScreen(
+                                    navController
+                                )
                             }
                         }
                     }

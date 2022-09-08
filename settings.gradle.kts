@@ -28,6 +28,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "Koguma"
 include("", "app")
+include(":core")
+include(":data")
+include(":domain")
+include(":presentation")
 
 fun VersionCatalogBuilder.general() {
     library("junit", "junit", "junit").version("4.13.2")
@@ -95,6 +99,8 @@ fun VersionCatalogBuilder.hilt() {
     library("hilt-android", "com.google.dagger", "hilt-android").versionRef(hilt)
     library("hilt-compiler", "com.google.dagger", "hilt-compiler").versionRef(hilt)
     library("hilt-navigation", "androidx.hilt", "hilt-navigation-compose").version("1.0.0")
+
+    library("javax-inject", "javax.inject:javax.inject:1")
 
     plugin("hilt", "com.google.dagger.hilt.android").versionRef(hilt)
 }
