@@ -8,7 +8,6 @@
 
 package me.ghostbear.koguma.domain.interactor
 
-import kotlinx.serialization.SerializationException
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.AniListRepository
 import java.io.IOException
@@ -22,8 +21,6 @@ class SearchOnlineManga @Inject constructor(
         return try {
             val list = aniListRepository.search(query)
             Result.Success(list)
-        } catch (e: SerializationException) {
-            Result.ContentMalformed
         } catch (e: IOException) {
             Result.UnknownNetworkError
         } catch (e: IllegalArgumentException) {

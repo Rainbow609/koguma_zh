@@ -40,6 +40,14 @@ abstract class DataModule {
 
         @Provides
         @Singleton
+        fun provideJson(): Json {
+            return Json {
+                ignoreUnknownKeys = true
+            }
+        }
+
+        @Provides
+        @Singleton
         fun provideHttpClient(json: Json): HttpClient {
             return HttpClient(CIO) {
                 expectSuccess = true

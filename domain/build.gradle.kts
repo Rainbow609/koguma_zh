@@ -4,7 +4,6 @@ import me.ghostbear.koguma.Config
 plugins {
     id("com.android.library")
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -39,6 +38,4 @@ android {
 
 dependencies {
     implementation(libs.javax.inject)
-
-    implementation(libs.kotlinx.serialization)
 }

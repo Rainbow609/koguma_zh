@@ -8,6 +8,7 @@
 
 package me.ghostbear.koguma.data.local
 
+import me.ghostbear.koguma.domain.model.Manga as DomainManga
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -18,24 +19,26 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.MangaRepository
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import javax.inject.Inject
+import me.ghostbear.koguma.data.mangaDataToDomain
+import me.ghostbear.koguma.data.mangaDomainToData
 
 class MangaRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val json: Json
 ) : MangaRepository {
 
-    override suspend fun read(uri: Uri): Manga = withContext(Dispatchers.IO) {
+    override suspend fun read(uri: Uri): DomainManga = withContext(Dispatchers.IO) {
         try {
             val inputStream = context.contentResolver.openInputStream(uri) ?: throw NullPointerException("The provider recently crashed")
-            inputStream.use {
-                json.decodeFromStream(inputStream)
+            val manga = inputStream.use {
+                json.decodeFromStream<Manga>(inputStream)
             }
+            mangaDataToDomain.invoke(manga)
         } catch (e: NullPointerException) {
             Log.e("MangaRepositoryImpl", "", e)
             throw e
@@ -57,13 +60,13 @@ class MangaRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun write(uri: Uri, manga: Manga) {
+    override suspend fun write(uri: Uri, manga: DomainManga) {
         withContext(Dispatchers.IO) {
             try {
                 context.contentResolver.openFileDescriptor(uri, "w")?.use {
                     FileOutputStream(it.fileDescriptor).use {
                         it.channel.truncate(0)
-                        json.encodeToStream(manga, it)
+                        json.encodeToStream(mangaDomainToData.invoke(manga), it)
                     }
                 }
             } catch (e: NullPointerException) {

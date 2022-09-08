@@ -8,7 +8,6 @@ plugins {
     id(libs.plugins.kotlin.kapt.get().pluginId)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -69,8 +68,6 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
-    implementation(libs.kotlinx.serialization)
 
     implementation(libs.compose.navigation)
     implementation(libs.hilt.navigation)

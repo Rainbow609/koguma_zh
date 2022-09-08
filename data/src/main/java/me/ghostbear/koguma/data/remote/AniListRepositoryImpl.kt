@@ -15,7 +15,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import kotlinx.serialization.SerializationException
-import me.ghostbear.koguma.data.mangaRemoteLocalMapper
+import me.ghostbear.koguma.data.mangaRemoteToDomain
 import me.ghostbear.koguma.data.remote.anilist.SearchForManga
 import me.ghostbear.koguma.data.remote.anilist.SearchForMangaQuery
 import me.ghostbear.koguma.data.remote.graphql.query
@@ -62,6 +62,6 @@ class AniListRepositoryImpl @Inject constructor(
         }
 
         return response.data.page?.media
-            ?.map(mangaRemoteLocalMapper) ?: emptyList()
+            ?.map(mangaRemoteToDomain) ?: emptyList()
     }
 }

@@ -9,7 +9,6 @@
 package me.ghostbear.koguma.domain.interactor
 
 import android.net.Uri
-import kotlinx.serialization.SerializationException
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.MangaRepository
 import java.io.FileNotFoundException
@@ -28,8 +27,6 @@ class ReadMangaFromFile @Inject constructor(
             Result.FileNotFound
         } catch (e: IOException) {
             Result.CouldntReadFile
-        } catch (e: SerializationException) {
-            Result.CouldntDecodeFile
         } catch (e: IllegalArgumentException) {
             Result.FileMalformed
         } catch (e: Exception) {
