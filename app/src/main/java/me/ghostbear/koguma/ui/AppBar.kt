@@ -9,14 +9,12 @@
 package me.ghostbear.koguma.ui
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.SmallTopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 
 @Composable
 fun SmallAppBar(
@@ -26,15 +24,12 @@ fun SmallAppBar(
     actions: @Composable (RowScope.() -> Unit) = {},
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
-    val scrollFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
-    val backgroundColor by TopAppBarDefaults.smallTopAppBarColors().containerColor(scrollFraction)
     SmallTopAppBar(
-        modifier = modifier
-            .drawBehind { drawRect(backgroundColor) }
-            .statusBarsPadding(),
+        modifier = modifier,
         title = title,
         navigationIcon = navigationIcon,
         actions = actions,
+        windowInsets = WindowInsets.statusBars,
         scrollBehavior = scrollBehavior
     )
 }

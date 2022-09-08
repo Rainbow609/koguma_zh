@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -67,11 +67,14 @@ fun KogumaTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
+            val controller = WindowInsetsControllerCompat(window, view)
             window.statusBarColor = Color.Transparent.toArgb()
+            controller.isAppearanceLightStatusBars = !darkTheme
             window.navigationBarColor = Color.Transparent.toArgb()
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = darkTheme.not()
-            insetsController.isAppearanceLightNavigationBars = darkTheme.not()
+            controller.isAppearanceLightNavigationBars = !darkTheme
+            if (Build.VERSION.SDK_INT >= 29) {
+                window?.isNavigationBarContrastEnforced = false
+            }
         }
     }
 

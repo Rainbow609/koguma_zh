@@ -108,7 +108,7 @@ class KogumaActivity : ComponentActivity() {
                             }
                         }
                     ) { paddingValues ->
-                        NavHost(navController = navController, startDestination = Route.Home.route, modifier = Modifier.padding(paddingValues)) {
+                        NavHost(navController = navController, startDestination = Route.Home.route, modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
                             composable(Route.Home.route) {
                                 MainScreen(
                                     viewModel = mainViewModel(MainState() as MainStateImpl)
