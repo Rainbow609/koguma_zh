@@ -24,7 +24,7 @@ import me.ghostbear.koguma.domain.model.Manga
 
 class SearchViewModel @AssistedInject constructor(
     @Assisted val state: SearchStateImpl,
-    val searchOnlineManga: SearchOnlineManga
+    private val searchOnlineManga: SearchOnlineManga
 ) : ViewModel(), SearchState by state {
 
     private val _events = Channel<Event>(Channel.UNLIMITED)

@@ -15,11 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import me.ghostbear.koguma.R
 import me.ghostbear.koguma.domain.interactor.ReadMangaFromFile
 import me.ghostbear.koguma.domain.interactor.WriteMangaToFile
@@ -35,33 +37,59 @@ class MainViewModel @AssistedInject constructor(
 
     var currentUri: Uri? by mutableStateOf(null)
 
-    suspend fun load(uri: Uri) {
-        when (val result = readMangaFromFile.await(uri)) {
-            is ReadMangaFromFile.Result.InternalError -> _events.trySend(Event.InternalError(result.error))
-            ReadMangaFromFile.Result.CouldntDecodeFile -> _events.trySend(Event.LocalizedMessage(R.string.error_decode_file))
-            ReadMangaFromFile.Result.CouldntReadFile -> _events.trySend(Event.LocalizedMessage(R.string.error_reading_file))
-            ReadMangaFromFile.Result.FileMalformed -> _events.trySend(Event.LocalizedMessage(R.string.error_file_malformed))
-            ReadMangaFromFile.Result.FileNotFound -> _events.trySend(Event.LocalizedMessage(R.string.error_file_not_found))
-            is ReadMangaFromFile.Result.Success -> {
-                val manga = result.manga
-                title = manga.title
-                author = manga.author
-                artist = manga.artist
-                description = manga.description
-                genre = manga.genre?.joinToString()
-                status = manga.status
-                _events.trySend(Event.LocalizedMessage(R.string.success_reading_file))
+    fun load(uri: Uri?, remember: Boolean = true) {
+        currentUri = null
+        viewModelScope.launch {
+            if (uri != null) {
+                if (remember) currentUri = uri
+                internalLoad(uri)
+            } else {
+                _events.send(Event.LocalizedMessage(R.string.error_uri_not_provided))
             }
         }
     }
 
-    suspend fun save(uri: Uri) {
-        when (val result = writeMangaToFile.await(uri, getManga())) {
-            is WriteMangaToFile.Result.InternalError -> _events.trySend(Event.InternalError(result.error))
-            WriteMangaToFile.Result.CouldntEncodeFile -> _events.trySend(Event.LocalizedMessage(R.string.error_encode_file))
-            WriteMangaToFile.Result.CouldntWriteFile -> _events.trySend(Event.LocalizedMessage(R.string.error_writing_file))
-            WriteMangaToFile.Result.FileNotFound -> _events.trySend(Event.LocalizedMessage(R.string.error_file_not_found))
-            WriteMangaToFile.Result.Success -> _events.trySend(Event.LocalizedMessage(R.string.success_writing_file))
+    private fun internalLoad(uri: Uri) {
+        viewModelScope.launch {
+            when (val result = readMangaFromFile.await(uri)) {
+                is ReadMangaFromFile.Result.InternalError -> _events.trySend(Event.InternalError(result.error))
+                ReadMangaFromFile.Result.CouldntDecodeFile -> _events.trySend(Event.LocalizedMessage(R.string.error_decode_file))
+                ReadMangaFromFile.Result.CouldntReadFile -> _events.trySend(Event.LocalizedMessage(R.string.error_reading_file))
+                ReadMangaFromFile.Result.FileMalformed -> _events.trySend(Event.LocalizedMessage(R.string.error_file_malformed))
+                ReadMangaFromFile.Result.FileNotFound -> _events.trySend(Event.LocalizedMessage(R.string.error_file_not_found))
+                is ReadMangaFromFile.Result.Success -> {
+                    val manga = result.manga
+                    title = manga.title
+                    author = manga.author
+                    artist = manga.artist
+                    description = manga.description
+                    genre = manga.genre?.joinToString()
+                    status = manga.status
+                    _events.trySend(Event.LocalizedMessage(R.string.success_reading_file))
+                }
+            }
+        }
+    }
+
+    fun save(uri: Uri?) {
+        viewModelScope.launch {
+            if (uri != null) {
+                internalSave(uri)
+            } else {
+                _events.send(Event.LocalizedMessage(R.string.error_uri_not_provided))
+            }
+        }
+    }
+
+    private fun internalSave(uri: Uri) {
+        viewModelScope.launch {
+            when (val result = writeMangaToFile.await(uri, getManga())) {
+                is WriteMangaToFile.Result.InternalError -> _events.trySend(Event.InternalError(result.error))
+                WriteMangaToFile.Result.CouldntEncodeFile -> _events.trySend(Event.LocalizedMessage(R.string.error_encode_file))
+                WriteMangaToFile.Result.CouldntWriteFile -> _events.trySend(Event.LocalizedMessage(R.string.error_writing_file))
+                WriteMangaToFile.Result.FileNotFound -> _events.trySend(Event.LocalizedMessage(R.string.error_file_not_found))
+                WriteMangaToFile.Result.Success -> _events.trySend(Event.LocalizedMessage(R.string.success_writing_file))
+            }
         }
     }
 
