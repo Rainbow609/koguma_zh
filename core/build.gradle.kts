@@ -1,8 +1,9 @@
 import me.ghostbear.koguma.Config
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id(libs.plugins.android.library.get().pluginId)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
