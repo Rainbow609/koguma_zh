@@ -14,5 +14,6 @@ data class Manga(
     val artist: String? = null,
     val description: String? = null,
     val genre: List<String>? = null,
-    val status: Status? = null
+    val status: Status? = null,
+    val cover: String? = null
 )

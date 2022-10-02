@@ -2,11 +2,12 @@ import me.ghostbear.koguma.Config
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.library")
+    id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.kapt.get().pluginId)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.apollo)
 }
 
 android {
@@ -48,5 +49,13 @@ dependencies {
 
     implementation(libs.kotlinx.serialization)
 
-    implementation(libs.bundles.ktor)
+    implementation(libs.apollo.runtime)
+}
+
+apollo {
+    packageName.set("me.ghostbear.koguma.data")
+    introspection {
+        endpointUrl.set("https://graphql.anilist.co/")
+        schemaFile.set(file("src/main/graphql/me/ghostbear/koguma/data/anilist/schema.graphqls"))
+    }
 }

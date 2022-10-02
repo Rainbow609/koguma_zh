@@ -1,0 +1,29 @@
+query SearchByType($query: String, $type: MediaType = MANGA) {
+    page: Page {
+        media(search: $query, type: $type) {
+            title {
+                romaji
+                english
+                native
+            }
+            coverImage {
+                extraLarge
+                large
+                medium
+            }
+            staff {
+                edges {
+                    role
+                    node {
+                        name {
+                            full
+                        }
+                    }
+                }
+            }
+            description
+            genres
+            status
+        }
+    }
+}

@@ -12,32 +12,32 @@ import me.ghostbear.koguma.domain.model.Manga as DomainManga
 import me.ghostbear.koguma.domain.model.Status as DomainStatus
 import me.ghostbear.koguma.data.local.Manga
 import me.ghostbear.koguma.data.local.Status
-import me.ghostbear.koguma.data.remote.anilist.Media
+import me.ghostbear.koguma.data.type.MediaStatus
 import me.ghostbear.koguma.extensions.decodeHtml
 
-val mangaRemoteToDomain: (Media) -> DomainManga = {
+val mangaRemoteToDomain: (SearchByTypeQuery.Medium) -> DomainManga = {
     DomainManga(
         title = it.title?.romaji,
         artist = it.staff?.edges
             ?.filter {
-                it.role == "Story & Art" || it.role == "Art"
+                it?.role == "Story & Art" || it?.role == "Art"
             }
-            ?.mapNotNull { it.node?.name?.full }
+            ?.mapNotNull { it?.node?.name?.full }
             ?.joinToString(),
         author = it.staff?.edges
             ?.filter {
-                it.role == "Story & Art" || it.role == "Story"
+                it?.role == "Story & Art" || it?.role == "Story"
             }
-            ?.mapNotNull { it.node?.name?.full }
+            ?.mapNotNull { it?.node?.name?.full }
             ?.joinToString(),
         description = it.description?.decodeHtml(),
-        genre = it.genres,
+        genre = it.genres?.filterNotNull(),
         status = when (it.status) {
-            "FINISHED" -> DomainStatus.PublishingFinished
-            "RELEASING" -> DomainStatus.Ongoing
-            "NOT_YET_RELEASED" -> DomainStatus.Unknown
-            "CANCELLED" -> DomainStatus.Cancelled
-            "HIATUS" -> DomainStatus.OnHaitus
+            MediaStatus.FINISHED -> DomainStatus.PublishingFinished
+            MediaStatus.RELEASING -> DomainStatus.Ongoing
+            MediaStatus.NOT_YET_RELEASED -> DomainStatus.Unknown
+            MediaStatus.CANCELLED -> DomainStatus.Cancelled
+            MediaStatus.HIATUS -> DomainStatus.OnHaitus
             else -> DomainStatus.Unknown
         }
     )

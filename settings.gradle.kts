@@ -17,11 +17,11 @@ dependencyResolutionManagement {
             general()
             aboutLibraries()
             androidx()
+            apollo()
             compose()
             firebase()
             hilt()
             kotlinx()
-            ktor()
         }
     }
 }
@@ -61,6 +61,14 @@ fun VersionCatalogBuilder.androidx() {
 
     plugin("android-application", "com.android.application").versionRef(agp)
     plugin("android-library", "com.android.library").versionRef(agp)
+}
+
+fun VersionCatalogBuilder.apollo() {
+    val version = version("apollo", "3.6.0")
+
+    library("apollo-runtime", "com.apollographql.apollo3", "apollo-runtime").versionRef(version)
+
+    plugin("apollo", "com.apollographql.apollo3").versionRef(version)
 }
 
 fun VersionCatalogBuilder.compose() {
@@ -113,18 +121,4 @@ fun VersionCatalogBuilder.kotlinx() {
     plugin("kotlinx-serialization", "org.jetbrains.kotlin.plugin.serialization").versionRef(kotlin)
     plugin("kotlin-android", "org.jetbrains.kotlin.android").versionRef(kotlin)
     plugin("kotlin-kapt", "org.jetbrains.kotlin.kapt").version("")
-}
-
-fun VersionCatalogBuilder.ktor() {
-    val ktor = version("ktor", "2.0.3")
-
-    library("ktor-core", "io.ktor", "ktor-client-core").versionRef(ktor)
-    library("ktor-cio", "io.ktor", "ktor-client-cio").versionRef(ktor)
-
-    library("ktor-content-negotiation", "io.ktor", "ktor-client-content-negotiation").versionRef(ktor)
-    library("ktor-serialization", "io.ktor", "ktor-serialization-kotlinx-json").versionRef(ktor)
-
-    library("ktor-logging", "io.ktor", "ktor-client-logging").versionRef(ktor)
-
-    bundle("ktor", listOf("ktor-core", "ktor-cio", "ktor-content-negotiation", "ktor-serialization", "ktor-logging"))
 }

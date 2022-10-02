@@ -8,17 +8,12 @@
 
 package me.ghostbear.koguma.data
 
+import com.apollographql.apollo3.ApolloClient
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.serialization.kotlinx.json.json
 import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import me.ghostbear.koguma.data.local.MangaRepositoryImpl
@@ -48,16 +43,10 @@ abstract class DataModule {
 
         @Provides
         @Singleton
-        fun provideHttpClient(json: Json): HttpClient {
-            return HttpClient(CIO) {
-                expectSuccess = true
-                install(ContentNegotiation) {
-                    json(json)
-                }
-                install(Logging) {
-                    level = LogLevel.BODY
-                }
-            }
+        fun provideApolloClient(): ApolloClient {
+            return ApolloClient.Builder()
+                .serverUrl("https://graphql.anilist.co/")
+                .build()
         }
     }
 }
