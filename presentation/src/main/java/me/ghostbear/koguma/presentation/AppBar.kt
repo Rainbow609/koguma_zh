@@ -11,7 +11,7 @@ package me.ghostbear.koguma.presentation
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,9 +24,9 @@ fun SmallAppBar(
     actions: @Composable (RowScope.() -> Unit) = {},
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
-    SmallTopAppBar(
-        modifier = modifier,
+    TopAppBar(
         title = title,
+        modifier = modifier,
         navigationIcon = navigationIcon,
         actions = actions,
         windowInsets = WindowInsets.statusBars,

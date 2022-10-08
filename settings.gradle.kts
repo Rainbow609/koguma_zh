@@ -36,11 +36,11 @@ include(":presentation")
 fun VersionCatalogBuilder.general() {
     library("junit", "junit", "junit").version("4.13.2")
 
-    plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("10.3.0")
+    plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("11.0.0")
 }
 
 fun VersionCatalogBuilder.aboutLibraries() {
-    val version = version("aboutlibraries", "10.4.0")
+    val version = version("aboutlibraries", "10.5.0")
 
     library("aboutlibraries-core", "com.mikepenz", "aboutlibraries-core").versionRef(version)
 
@@ -50,12 +50,12 @@ fun VersionCatalogBuilder.aboutLibraries() {
 }
 
 fun VersionCatalogBuilder.androidx() {
-    val agp = version("agp", "7.3.0-rc01")
+    val agp = version("agp", "7.4.0-beta02")
 
     library("androidx-viewmodel-compose", "androidx.lifecycle", "lifecycle-viewmodel-compose").version("2.5.1")
-    library("androidx-corektx", "androidx.core", "core-ktx").version("1.8.0")
+    library("androidx-corektx", "androidx.core", "core-ktx").version("1.9.0")
     library("androidx-lifecycle-runtimektx", "androidx.lifecycle", "lifecycle-runtime-ktx").version("2.5.1")
-    library("androidx-activity-compose", "androidx.activity", "activity-compose").version("1.5.1")
+    library("androidx-activity-compose", "androidx.activity", "activity-compose").version("1.6.0")
     library("androidx-junit", "androidx.test.ext", "junit").version("1.1.3")
     library("androidx-espresso", "androidx.test.espresso", "espresso-core").version("3.4.0")
 
@@ -64,7 +64,7 @@ fun VersionCatalogBuilder.androidx() {
 }
 
 fun VersionCatalogBuilder.apollo() {
-    val version = version("apollo", "3.6.0")
+    val version = version("apollo", "3.6.2")
 
     library("apollo-runtime", "com.apollographql.apollo3", "apollo-runtime").versionRef(version)
 
@@ -72,28 +72,29 @@ fun VersionCatalogBuilder.apollo() {
 }
 
 fun VersionCatalogBuilder.compose() {
-    val compose = version("compose", "1.2.0")
+    val compose = version("compose", "1.2.1")
+    version("compose-compiler", "1.3.2")
 
-    val navigation = version("navigation", "2.5.1")
+    val navigation = version("navigation", "2.5.2")
 
     library("compose-navigation", "androidx.navigation", "navigation-compose").versionRef(navigation)
 
     library("compose-icons", "androidx.compose.material", "material-icons-extended").versionRef(compose)
     library("compose-ui-core", "androidx.compose.ui", "ui").versionRef(compose)
     library("compose-ui-toolingpreview", "androidx.compose.ui", "ui-tooling-preview").versionRef(compose)
-    library("compose-material3", "androidx.compose.material3", "material3").version("1.0.0-beta01")
+    library("compose-material3", "androidx.compose.material3", "material3").version("1.0.0-rc01")
     library("compose-junit", "androidx.compose.ui", "ui-test-junit4").versionRef(compose)
     library("compose-ui-tooling", "androidx.compose.ui", "ui-tooling").versionRef(compose)
     library("compose-ui-testmanifest", "androidx.compose.ui", "ui-test-manifest").versionRef(compose)
 }
 
 fun VersionCatalogBuilder.firebase() {
-    library("google-services", "com.google.gms", "google-services").version("4.3.13")
+    library("google-services", "com.google.gms", "google-services").version("4.3.14")
 
-    library("firebase-bom", "com.google.firebase", "firebase-bom").version("30.3.2")
+    library("firebase-bom", "com.google.firebase", "firebase-bom").version("30.5.0")
     library("firebase-analytics-ktx", "com.google.firebase", "firebase-analytics-ktx").version("")
     library("firebase-crashlytics-ktx", "com.google.firebase", "firebase-crashlytics-ktx").version("")
-    library("firebase-crashlytics-gradle", "com.google.firebase", "firebase-crashlytics-gradle").version("2.9.1")
+    library("firebase-crashlytics-gradle", "com.google.firebase", "firebase-crashlytics-gradle").version("2.9.2")
 
     plugin("google-services", "com.google.gms.google-services").version("")
     plugin("firebase-crashlytics", "com.google.firebase.crashlytics").version("")
@@ -102,7 +103,7 @@ fun VersionCatalogBuilder.firebase() {
 }
 
 fun VersionCatalogBuilder.hilt() {
-    val hilt = version("hilt", "2.43.2")
+    val hilt = version("hilt", "2.44")
 
     library("hilt-android", "com.google.dagger", "hilt-android").versionRef(hilt)
     library("hilt-compiler", "com.google.dagger", "hilt-compiler").versionRef(hilt)
@@ -114,9 +115,9 @@ fun VersionCatalogBuilder.hilt() {
 }
 
 fun VersionCatalogBuilder.kotlinx() {
-    val kotlin = version("kotlin", "1.7.10")
+    val kotlin = version("kotlin", "1.7.20")
 
-    library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.4.0-RC")
+    library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.4.0")
 
     plugin("kotlinx-serialization", "org.jetbrains.kotlin.plugin.serialization").versionRef(kotlin)
     plugin("kotlin-android", "org.jetbrains.kotlin.android").versionRef(kotlin)
