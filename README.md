@@ -14,9 +14,10 @@ The application uses AniList for getting metadata from online, but metadata can 
 - Coroutines for asynchronous work
 - Hilt for dependency injection
 - Kotlin Serialization for parsing and writing JSON.
-- Ktor for networking
+- Apollo GraphQL for networking
 - Jetpack Compose for creating the UI
 - Jetpack Compose Navigation for navigating between screens
+- Coil for displaying images
 - Version Catalog for dependency management
 - ktlint for checking/formatting code style
 
