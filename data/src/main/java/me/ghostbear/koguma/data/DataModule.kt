@@ -14,12 +14,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import me.ghostbear.koguma.data.local.MangaRepositoryImpl
 import me.ghostbear.koguma.data.remote.AniListRepositoryImpl
 import me.ghostbear.koguma.domain.repository.AniListRepository
 import me.ghostbear.koguma.domain.repository.MangaRepository
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

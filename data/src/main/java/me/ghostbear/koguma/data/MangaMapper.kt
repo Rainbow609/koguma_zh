@@ -8,12 +8,12 @@
 
 package me.ghostbear.koguma.data
 
-import me.ghostbear.koguma.domain.model.Manga as DomainManga
-import me.ghostbear.koguma.domain.model.Status as DomainStatus
 import me.ghostbear.koguma.data.local.Manga
 import me.ghostbear.koguma.data.local.Status
 import me.ghostbear.koguma.data.type.MediaStatus
 import me.ghostbear.koguma.extensions.decodeHtml
+import me.ghostbear.koguma.domain.model.Manga as DomainManga
+import me.ghostbear.koguma.domain.model.Status as DomainStatus
 
 val mangaRemoteToDomain: (SearchByTypeQuery.Medium) -> DomainManga = {
     DomainManga(

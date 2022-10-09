@@ -27,11 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import me.ghostbear.koguma.presentation.R
 import me.ghostbear.koguma.extensions.MimeType
 import me.ghostbear.koguma.extensions.isScrollingUp
 import me.ghostbear.koguma.extensions.toast
 import me.ghostbear.koguma.presentation.KogumaContracts
+import me.ghostbear.koguma.presentation.R
 import me.ghostbear.koguma.presentation.SmallAppBar
 import me.ghostbear.koguma.presentation.main.MainViewModel.Event
 import me.ghostbear.koguma.presentation.main.components.MainContent

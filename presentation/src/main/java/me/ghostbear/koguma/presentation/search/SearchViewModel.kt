@@ -18,9 +18,9 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import me.ghostbear.koguma.presentation.R
 import me.ghostbear.koguma.domain.interactor.SearchOnlineManga
 import me.ghostbear.koguma.domain.model.Manga
+import me.ghostbear.koguma.presentation.R
 
 class SearchViewModel @AssistedInject constructor(
     @Assisted val state: SearchStateImpl,

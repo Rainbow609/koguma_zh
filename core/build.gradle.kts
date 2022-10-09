@@ -40,3 +40,9 @@ dependencies {
 
     implementation(libs.androidx.corektx)
 }
+
+tasks {
+    preBuild {
+        dependsOn(ktlintFormat)
+    }
+}

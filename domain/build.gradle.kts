@@ -39,3 +39,9 @@ android {
 dependencies {
     implementation(libs.javax.inject)
 }
+
+tasks {
+    preBuild {
+        dependsOn(ktlintFormat)
+    }
+}

@@ -12,11 +12,11 @@ import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
-import javax.inject.Inject
 import me.ghostbear.koguma.data.SearchByTypeQuery
 import me.ghostbear.koguma.data.mangaRemoteToDomain
 import me.ghostbear.koguma.domain.model.Manga
 import me.ghostbear.koguma.domain.repository.AniListRepository
+import javax.inject.Inject
 
 class AniListRepositoryImpl @Inject constructor(
     private val apolloClient: ApolloClient,

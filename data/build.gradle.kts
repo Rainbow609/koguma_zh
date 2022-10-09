@@ -59,3 +59,9 @@ apollo {
         schemaFile.set(file("src/main/graphql/me/ghostbear/koguma/data/anilist/schema.graphqls"))
     }
 }
+
+tasks {
+    preBuild {
+        dependsOn(ktlintFormat)
+    }
+}

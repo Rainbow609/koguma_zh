@@ -71,3 +71,9 @@ dependencies {
     debugImplementation(libs.compose.ui.testmanifest)
     androidTestImplementation(libs.compose.junit)
 }
+
+tasks {
+    preBuild {
+        dependsOn(ktlintFormat)
+    }
+}

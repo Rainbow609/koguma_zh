@@ -8,7 +8,6 @@
 
 package me.ghostbear.koguma.data.local
 
-import me.ghostbear.koguma.domain.model.Manga as DomainManga
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -19,13 +18,14 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
+import me.ghostbear.koguma.data.mangaDataToDomain
+import me.ghostbear.koguma.data.mangaDomainToData
 import me.ghostbear.koguma.domain.repository.MangaRepository
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import javax.inject.Inject
-import me.ghostbear.koguma.data.mangaDataToDomain
-import me.ghostbear.koguma.data.mangaDomainToData
+import me.ghostbear.koguma.domain.model.Manga as DomainManga
 
 class MangaRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,

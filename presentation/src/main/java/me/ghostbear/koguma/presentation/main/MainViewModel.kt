@@ -22,9 +22,9 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import me.ghostbear.koguma.presentation.R
 import me.ghostbear.koguma.domain.interactor.ReadMangaFromFile
 import me.ghostbear.koguma.domain.interactor.WriteMangaToFile
+import me.ghostbear.koguma.presentation.R
 
 class MainViewModel @AssistedInject constructor(
     @Assisted private val state: MainStateImpl,
