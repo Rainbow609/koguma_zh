@@ -15,6 +15,7 @@ val Manga.authorWithArtist: String
         return when {
             artist != null && artist != author -> "$author, $artist"
             author != null -> author!!
+            artist != null -> artist!!
             else -> ""
         }
     }

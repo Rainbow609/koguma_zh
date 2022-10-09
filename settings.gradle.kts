@@ -36,6 +36,8 @@ include(":presentation")
 fun VersionCatalogBuilder.general() {
     library("junit", "junit", "junit").version("4.13.2")
 
+    library("coil-compose", "io.coil-kt", "coil-compose").version("2.2.2")
+
     plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("11.0.0")
 }
 
@@ -86,6 +88,7 @@ fun VersionCatalogBuilder.compose() {
     library("compose-junit", "androidx.compose.ui", "ui-test-junit4").versionRef(compose)
     library("compose-ui-tooling", "androidx.compose.ui", "ui-tooling").versionRef(compose)
     library("compose-ui-testmanifest", "androidx.compose.ui", "ui-test-manifest").versionRef(compose)
+    library("compose-animation", "androidx.compose.animation", "animation").versionRef(compose)
 }
 
 fun VersionCatalogBuilder.firebase() {

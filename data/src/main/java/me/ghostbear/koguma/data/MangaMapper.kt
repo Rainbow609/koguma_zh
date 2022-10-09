@@ -39,6 +39,9 @@ val mangaRemoteToDomain: (SearchByTypeQuery.Medium) -> DomainManga = {
             MediaStatus.CANCELLED -> DomainStatus.Cancelled
             MediaStatus.HIATUS -> DomainStatus.OnHaitus
             else -> DomainStatus.Unknown
+        },
+        cover = it.coverImage?.run {
+            extraLarge ?: large ?: medium
         }
     )
 }

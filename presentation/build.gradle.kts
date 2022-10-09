@@ -60,6 +60,9 @@ dependencies {
     implementation(libs.compose.icons)
 
     implementation(libs.compose.navigation)
+    implementation(libs.compose.animation)
+
+    implementation(libs.coil.compose)
 
     implementation(libs.compose.ui.core)
     implementation(libs.compose.ui.toolingpreview)
