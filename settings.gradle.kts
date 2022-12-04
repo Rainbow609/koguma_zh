@@ -52,7 +52,7 @@ fun VersionCatalogBuilder.aboutLibraries() {
 }
 
 fun VersionCatalogBuilder.androidx() {
-    val agp = version("agp", "7.4.0-beta02")
+    val agp = version("agp", "7.4.0-rc01")
 
     library("androidx-viewmodel-compose", "androidx.lifecycle", "lifecycle-viewmodel-compose").version("2.5.1")
     library("androidx-corektx", "androidx.core", "core-ktx").version("1.9.0")
