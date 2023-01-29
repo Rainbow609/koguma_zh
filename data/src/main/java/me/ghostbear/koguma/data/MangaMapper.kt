@@ -8,8 +8,8 @@
 
 package me.ghostbear.koguma.data
 
-import me.ghostbear.koguma.data.local.Manga
 import me.ghostbear.koguma.data.local.Status
+import me.ghostbear.koguma.data.local.json.LocalManga
 import me.ghostbear.koguma.data.type.MediaStatus
 import me.ghostbear.koguma.extensions.decodeHtml
 import me.ghostbear.koguma.domain.model.Manga as DomainManga
@@ -46,7 +46,7 @@ val mangaRemoteToDomain: (SearchByTypeQuery.Medium) -> DomainManga = {
     )
 }
 
-val mangaDataToDomain: (Manga) -> DomainManga = {
+val mangaDataToDomain: (LocalManga) -> DomainManga = {
     DomainManga(
         title = it.title,
         artist = it.artist,
@@ -69,8 +69,8 @@ val statusDataToDomain: (Status?) -> DomainStatus = {
     }
 }
 
-val mangaDomainToData: (DomainManga) -> Manga = {
-    Manga(
+val mangaDomainToData: (DomainManga) -> LocalManga = {
+    LocalManga(
         title = it.title,
         artist = it.artist,
         author = it.author,

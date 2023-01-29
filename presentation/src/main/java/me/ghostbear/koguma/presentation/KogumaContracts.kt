@@ -13,5 +13,5 @@ import me.ghostbear.koguma.extensions.MimeType
 
 object KogumaContracts {
     val OpenDocument = ActivityResultContracts.OpenDocument()
-    val CreateJsonDocument = ActivityResultContracts.CreateDocument(MimeType.Json)
+    val CreateDocument = ActivityResultContracts.CreateDocument(MimeType.WILDCARD)
 }

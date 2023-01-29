@@ -9,5 +9,5 @@
 package me.ghostbear.koguma.extensions
 
 object MimeType {
-    const val Json = "application/json"
+    const val WILDCARD = "*/*"
 }

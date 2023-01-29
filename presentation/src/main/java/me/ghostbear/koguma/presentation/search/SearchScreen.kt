@@ -55,7 +55,7 @@ fun SearchScreen(
     mainViewModel: MainViewModel
 ) {
     val context = LocalContext.current
-    val createDocumentLauncher = rememberLauncherForActivityResult(KogumaContracts.CreateJsonDocument, mainViewModel::save)
+    val createDocumentLauncher = rememberLauncherForActivityResult(KogumaContracts.CreateDocument, mainViewModel::save)
     Scaffold(
         topBar = {
             SearchToolbar(

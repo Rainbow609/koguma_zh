@@ -17,8 +17,12 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import me.ghostbear.koguma.data.local.MangaRepositoryImpl
 import me.ghostbear.koguma.data.remote.AniListRepositoryImpl
-import me.ghostbear.koguma.domain.repository.AniListRepository
-import me.ghostbear.koguma.domain.repository.MangaRepository
+import me.ghostbear.koguma.domain.service.AniListRepository
+import me.ghostbear.koguma.domain.service.MangaRepository
+import nl.adaptivity.xmlutil.XmlDeclMode
+import nl.adaptivity.xmlutil.core.XmlVersion
+import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
+import nl.adaptivity.xmlutil.serialization.XML
 import javax.inject.Singleton
 
 @Module
@@ -47,6 +51,18 @@ abstract class DataModule {
             return ApolloClient.Builder()
                 .serverUrl("https://graphql.anilist.co/")
                 .build()
+        }
+
+        @Provides
+        @Singleton
+        fun provideXml(): XML {
+            return XML {
+                unknownChildHandler = UnknownChildHandler { _, _, _, _, _ -> emptyList() }
+                autoPolymorphic = true
+                xmlDeclMode = XmlDeclMode.Charset
+                indent = 4
+                xmlVersion = XmlVersion.XML10
+            }
         }
     }
 }

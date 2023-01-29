@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(libs.javax.inject)
+    implementation("androidx.core:core-ktx:+")
 }
 
 tasks {

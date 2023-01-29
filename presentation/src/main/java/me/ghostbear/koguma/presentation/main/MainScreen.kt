@@ -43,7 +43,7 @@ fun MainScreen(
 ) {
     val context = LocalContext.current
     val openDocumentLauncher = rememberLauncherForActivityResult(KogumaContracts.OpenDocument, viewModel::load)
-    val createDocumentLauncher = rememberLauncherForActivityResult(KogumaContracts.CreateJsonDocument, viewModel::save)
+    val createDocumentLauncher = rememberLauncherForActivityResult(KogumaContracts.CreateDocument, viewModel::save)
 
     val scrollState = rememberScrollState()
     val topAppBarState = enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -57,7 +57,7 @@ fun MainScreen(
                     Text(text = stringResource(id = R.string.app_name))
                 },
                 actions = {
-                    IconButton(onClick = { openDocumentLauncher.launch(arrayOf(MimeType.Json)) }) {
+                    IconButton(onClick = { openDocumentLauncher.launch(arrayOf(MimeType.WILDCARD)) }) {
                         Icon(Icons.Outlined.FileOpen, contentDescription = stringResource(R.string.content_description_open))
                     }
                 },

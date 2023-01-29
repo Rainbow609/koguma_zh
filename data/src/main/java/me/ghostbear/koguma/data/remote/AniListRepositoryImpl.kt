@@ -15,7 +15,7 @@ import com.apollographql.apollo3.exception.ApolloException
 import me.ghostbear.koguma.data.SearchByTypeQuery
 import me.ghostbear.koguma.data.mangaRemoteToDomain
 import me.ghostbear.koguma.domain.model.Manga
-import me.ghostbear.koguma.domain.repository.AniListRepository
+import me.ghostbear.koguma.domain.service.AniListRepository
 import javax.inject.Inject
 
 class AniListRepositoryImpl @Inject constructor(

@@ -38,6 +38,9 @@ fun VersionCatalogBuilder.general() {
 
     library("coil-compose", "io.coil-kt", "coil-compose").version("2.2.2")
 
+    library("xml-core", "io.github.pdvrieze.xmlutil", "core-android").version("0.84.3")
+    library("xml", "io.github.pdvrieze.xmlutil", "serialization-android").version("0.84.3")
+
     plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("11.0.0")
 }
 
@@ -75,7 +78,7 @@ fun VersionCatalogBuilder.apollo() {
 
 fun VersionCatalogBuilder.compose() {
     val compose = version("compose", "1.2.1")
-    version("compose-compiler", "1.3.2")
+    version("compose-compiler", "1.4.0")
 
     val navigation = version("navigation", "2.5.2")
 
@@ -118,7 +121,7 @@ fun VersionCatalogBuilder.hilt() {
 }
 
 fun VersionCatalogBuilder.kotlinx() {
-    val kotlin = version("kotlin", "1.7.20")
+    val kotlin = version("kotlin", "1.8.0")
 
     library("kotlinx-serialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.4.1")
 

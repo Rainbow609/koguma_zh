@@ -9,7 +9,7 @@
 package me.ghostbear.koguma.domain.interactor
 
 import me.ghostbear.koguma.domain.model.Manga
-import me.ghostbear.koguma.domain.repository.AniListRepository
+import me.ghostbear.koguma.domain.service.AniListRepository
 import java.io.IOException
 import javax.inject.Inject
 

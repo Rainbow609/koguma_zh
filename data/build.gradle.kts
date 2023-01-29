@@ -49,6 +49,9 @@ dependencies {
 
     implementation(libs.kotlinx.serialization)
 
+    implementation(libs.xml.core)
+    implementation(libs.xml)
+
     implementation(libs.apollo.runtime)
 }
 

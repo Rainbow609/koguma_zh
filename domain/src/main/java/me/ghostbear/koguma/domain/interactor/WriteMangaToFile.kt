@@ -10,7 +10,7 @@ package me.ghostbear.koguma.domain.interactor
 
 import android.net.Uri
 import me.ghostbear.koguma.domain.model.Manga
-import me.ghostbear.koguma.domain.repository.MangaRepository
+import me.ghostbear.koguma.domain.service.MangaRepository
 import java.io.FileNotFoundException
 import java.io.IOException
 import javax.inject.Inject
