@@ -3,61 +3,61 @@
     <string name="app_name">Koguma</string>
 
     <!-- General -->
-    <string name="action_save">Save</string>
-    <string name="content_description_save">Save file</string>
-    <string name="content_description_open">Open file</string>
+    <string name="action_save">保存</string>
+    <string name="content_description_save">保存文件</string>
+    <string name="content_description_open">打开文件</string>
 
     <!-- Error messages -->
-    <string name="error_encode_file">Couldn\'t encode file</string>
-    <string name="error_writing_file">Couldn\'t write file</string>
-    <string name="error_file_not_found">File not found</string>
-    <string name="success_writing_file">Success writing file</string>
-    <string name="success_reading_file">Success reading file</string>
-    <string name="error_file_malformed">Couldn\'t decode file, the JSON content is malformed</string>
-    <string name="error_reading_file">Couldn\'t read file</string>
-    <string name="error_decode_file">Couldn\'t decode file</string>
-    <string name="error_connection_timeout">Connection Timeout</string>
-    <string name="error_response_malformed">Couldn\'t decode response, the JSON content is malformed</string>
-    <string name="error_server_network">The server has issues</string>
-    <string name="error_client_network">The client has issues</string>
-    <string name="error_client_redirect">The client was redirected</string>
-    <string name="error_illegal_response">Illegal response</string>
-    <string name="error_network">Network error</string>
-    <string name="error_uri_not_provided">No Uri was provided</string>
-    <string name="internal_error">Internal Error</string>
+    <string name="error_encode_file">无法编码文件</string>
+    <string name="error_writing_file">无法写入文件</string>
+    <string name="error_file_not_found">文件未找到</string>
+    <string name="success_writing_file">成功写入文件</string>
+    <string name="success_reading_file">成功读取文件</string>
+    <string name="error_file_malformed">无法解码文件，JSON 内容格式错误。</string>
+    <string name="error_reading_file">无法读取文件。</string>
+    <string name="error_decode_file">无法解码文件。</string>
+    <string name="error_connection_timeout">连接超时</string>
+    <string name="error_response_malformed">无法解码响应，JSON内容格式不正确。</string>
+    <string name="error_server_network">服务器出现问题。</string>
+    <string name="error_client_network">客户有问题</string>
+    <string name="error_client_redirect">客户被重定向。</string>
+    <string name="error_illegal_response">非法回应</string>
+    <string name="error_network">网络错误.</string>
+    <string name="error_uri_not_provided">未提供Uri</string>
+    <string name="internal_error">内部错误</string>
 
     <!-- Navigation bar -->
-    <string name="screen_home">Home</string>
-    <string name="screen_search">Search</string>
-    <string name="screen_about">About</string>
+    <string name="screen_home">主页</string>
+    <string name="screen_search">搜索</string>
+    <string name="screen_about">关于</string>
 
     <!-- Statuses -->
-    <string name="status_unknown">Unknown</string>
-    <string name="status_ongoing">Ongoing</string>
-    <string name="status_completed">Completed</string>
-    <string name="status_licensed">Licensed</string>
-    <string name="status_publishing_finished">Publishing Finished</string>
-    <string name="status_cancelled">Cancelled</string>
-    <string name="status_on_haitus">On Hiatus</string>
+    <string name="status_unknown">未知</string>
+    <string name="status_ongoing">进行中</string>
+    <string name="status_completed">完结</string>
+    <string name="status_licensed">连载中</string>
+    <string name="status_publishing_finished">出版完成。</string>
+    <string name="status_cancelled">取消</string>
+    <string name="status_on_haitus">暂停中</string>
 
     <!-- Licenses screen -->
-    <string name="licenses">Licenses</string>
+    <string name="licenses">许可证</string>
 
     <!-- Main screen -->
-    <string name="title">Title</string>
-    <string name="author">Author</string>
-    <string name="artist">Artist</string>
-    <string name="description">Description</string>
-    <string name="genre">Genre</string>
-    <string name="genre_description">Use a comma (,) to separate the genres</string>
-    <string name="status">Status</string>
-    <string name="search">Search</string>
-    <string name="back">Back</string>
-    <string name="clear">Clear</string>
-    <string name="empty_result">Empty result</string>
+    <string name="title">标题</string>
+    <string name="author">作者</string>
+    <string name="artist">艺术家</string>
+    <string name="description">描述</string>
+    <string name="genre">标签</string>
+    <string name="genre_description">使用逗号(,)来分隔不同的标签。</string>
+    <string name="status">状态</string>
+    <string name="search">搜索</string>
+    <string name="back">返回</string>
+    <string name="clear">清空</string>
+    <string name="empty_result">空结果</string>
 
     <!-- Search screen -->
-    <string name="override">Override</string>
-    <string name="override_description">You are about to override the current form. Are you sure you want to override it?</string>
+    <string name="override">覆盖</string>
+    <string name="override_description">您将要覆盖当前表单。您确定要覆盖它吗？</string>
 
 </resources>
