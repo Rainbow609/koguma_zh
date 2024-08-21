@@ -1,5 +1,8 @@
 # ![app icon](./.github/images/app-icon.png) Koguma
 
+# 说明
+个人使用
+
 Koguma a tool that helps you create metadata for Tachiyomi's Local Source entries.
 
 The application uses AniList for getting metadata from online, but metadata can be manually created and edited if desired.
