@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    if: github.repository == 'ghostbear/koguma'
+    #if: github.repository == 'ghostbear/koguma'
     runs-on: ubuntu-latest
 
     steps:
